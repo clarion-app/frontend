@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { logger } from './src/logger';
 
 export const clarionDynamicRoutesPlugin = () => ({
     name: 'clarion-dynamic-routes',
@@ -9,6 +10,7 @@ export const clarionDynamicRoutesPlugin = () => ({
       if(filename !== 'package.json') return;
   
       console.log(`${timestamp}: ${file} updated`);
+      logger(`${file} updated`);
     
       const clarionPackage = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
       //store keys from clarionPackage.dependencies in array
@@ -30,6 +32,8 @@ export const clarionDynamicRoutesPlugin = () => ({
           imports.push(importStatement);
         }
       });
+
+      components['div'] = '/';  // temporary fix for root route
   
       let output = imports.join('\n');
       output += '\n\n';
