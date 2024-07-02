@@ -1,2 +1,5 @@
 package-lock.json
 .git
+node_modules
+App.css
+assets

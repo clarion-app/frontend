@@ -45,7 +45,7 @@ export const clarionDynamicRoutesPlugin = () => ({
       });
       output += '    </Routes>\n';
       output += '  );\n';
-      output += '};';
+      output += '};\n';
       // write imports to src/ClarionRoutes.tsx
       fs.writeFileSync('./src/ClarionRoutes.tsx', output, 'utf8');
     }
