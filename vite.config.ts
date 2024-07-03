@@ -6,6 +6,7 @@ import { clarionDynamicMenuPlugin } from './clarionDynamicMenuPlugin';
 import { clarionDynamicRoutes } from './clarionDynamicRoutes';
 import { clarionDynamicMenu } from './clarionDynamicMenu';
 
+// This plugin is to ensure ClarionRoutes.tsx and ClarionMenu.tsx exist before starting the server
 export const devSetupPlugin = () => ({
   name: 'dev-setup-plugin',
   configureServer() {

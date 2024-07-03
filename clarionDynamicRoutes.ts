@@ -1,6 +1,15 @@
 import * as fs from 'fs';
 import { logger } from './src/logger';
 
+/* 
+ * This function is used to dynamically generate routes for the Clarion app.
+ * It reads the package.json file and looks for dependencies that have customFields.routes in their package.json.
+ * It then generates a ClarionRoutes.tsx file that contains the routes for the Clarion app.
+ * The generated file is used by App.tsx
+ * The function is called by the clarionDynamicRoutesPlugin when a file is updated.
+ * The function is also called by the devSetupPlugin to ensure the ClarionRoutes.tsx file exists before starting the server.
+ */
+
 export const clarionDynamicRoutes = (file: string, timestamp: number) => {
   const fileParts = file.split('/');
   const filename = fileParts[fileParts.length - 1];
