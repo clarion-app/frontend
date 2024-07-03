@@ -1,9 +1,10 @@
 import { ClarionRoutes } from "./ClarionRoutes";
+import { ClarionMenu } from "./ClarionMenu";
 
 function App() {
-
   return (
     <>
+      <ClarionMenu />
       <input type="text" id="package" placeholder="Package Name" />
       <button onClick = {() => {
         const packageName = (document.getElementById('package')! as HTMLInputElement).value;
