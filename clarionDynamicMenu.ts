@@ -6,7 +6,7 @@ import { logger } from './src/logger';
  * It reads the package.json file and looks for dependencies that have customFields.routes in their package.json.
  * It then generates a ClarionMenu.tsx file that contains the menu for the Clarion app.
  * The generated file is used by App.tsx
- * The function is called by the clarionDynamicMenuPlugin when a file is updated.
+ * The function is called by the clarionDynamicMenuPlugin when package.json is updated.
  * The function is also called by the devSetupPlugin to ensure the ClarionMenu.tsx file exists before starting the server.
  */
 
