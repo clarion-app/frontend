@@ -11,6 +11,12 @@ export const logger = (log: string) => {
     // path is root + /log
     const path = `./log/${filename}`;
 
+    // check if directory exists
+    if (!fs.existsSync('./log')) {
+        // create directory
+        fs.mkdirSync('./log');
+    }
+
     // check if file exists
     if (!fs.existsSync(path)) {
         // create file
