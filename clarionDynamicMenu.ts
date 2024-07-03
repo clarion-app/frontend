@@ -46,8 +46,8 @@ export const clarionDynamicMenu = (file: string, timestamp: number) => {
   Object.keys(packages).forEach((packageName) => {
     output += `      <div>\n`;
     output += `        <h2>${packageName}</h2>\n`;
-    Object.keys(packages[packageName]).forEach((path) => {
-      output += `        <a href="${path}">${packages[packageName][path]}</a>\n`;
+    Object.keys(packages[packageName]).forEach((el) => {
+      output += `        <a href="${packages[packageName][el]}">${el}</a>\n`;
     });
     output += `      </div>\n`;
   });
