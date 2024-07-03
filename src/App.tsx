@@ -1,6 +1,7 @@
 import { ClarionRoutes } from "./ClarionRoutes";
 import { ClarionMenu } from "./ClarionMenu";
 
+// Tells the dev server to install or uninstall a package.
 const packageAction = (action: string, packageName: string) => {
   if (!import.meta.hot) return;
   if(packageName.length === 0) return;
