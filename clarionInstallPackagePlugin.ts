@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import { logger } from './src/logger';
 
-const npmCommand = "/home/tim/.npm-global/bin/npm";
+const npmCommand = "./node_modules/.bin/npm";
 
 export const clarionInstallPackagePlugin = () => ({
     name: 'clarion-install-package',
