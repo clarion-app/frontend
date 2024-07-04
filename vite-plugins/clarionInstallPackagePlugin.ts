@@ -17,8 +17,10 @@ export const clarionInstallPackagePlugin = () => ({
             }
             console.log(`stdout: ${stdout}`);
             logger(`stdout: ${stdout}`);
-            console.error(`stderr: ${stderr}`);
-            if(stderr.length) logger(`stderr: ${stderr}`);
+            if(stderr.length) {
+              console.error(`stderr: ${stderr}`);
+              logger(`stderr: ${stderr}`);
+            }
           });
         }
         if(data.uninstall) {
@@ -31,8 +33,10 @@ export const clarionInstallPackagePlugin = () => ({
             }
             console.log(`stdout: ${stdout}`);
             logger(`stdout: ${stdout}`);
-            console.error(`stderr: ${stderr}`);
-            if(stderr.length) logger(`stderr: ${stderr}`);
+            if(stderr.length) {
+              console.error(`stderr: ${stderr}`);
+              logger(`stderr: ${stderr}`);
+            }
           });
         }
       })
