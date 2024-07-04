@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react'
-import { clarionDynamicRoutesPlugin } from './clarionDynamicRoutesPlugin';
-import { clarionInstallPackagePlugin } from './clarionInstallPackagePlugin';
-import { clarionDynamicMenuPlugin } from './clarionDynamicMenuPlugin';
-import { clarionDynamicRoutes } from './clarionDynamicRoutes';
-import { clarionDynamicMenu } from './clarionDynamicMenu';
+import { clarionDynamicRoutesPlugin } from './vite-plugins/clarionDynamicRoutesPlugin';
+import { clarionInstallPackagePlugin } from './vite-plugins/clarionInstallPackagePlugin';
+import { clarionDynamicMenuPlugin } from './vite-plugins/clarionDynamicMenuPlugin';
+import { clarionDynamicRoutes } from './vite-plugins/clarionDynamicRoutes';
+import { clarionDynamicMenu } from './vite-plugins/clarionDynamicMenu';
 
 // This plugin is to ensure ClarionRoutes.tsx and ClarionMenu.tsx exist before starting the server
 export const devSetupPlugin = () => ({

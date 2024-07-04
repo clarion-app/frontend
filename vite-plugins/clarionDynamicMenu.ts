@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { logger } from './src/logger';
+import { logger } from '../logger';
 
 /* 
  * This function is used to dynamically generate a menu for the Clarion app.

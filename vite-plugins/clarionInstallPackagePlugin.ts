@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { logger } from './src/logger';
+import { logger } from '../logger';
 
 const npmCommand = "./node_modules/.bin/npm";
 
