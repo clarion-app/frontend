@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import { logger } from '../logger';
 
 /* 
  * This function is used to dynamically generate a menu for the Clarion app.
@@ -10,14 +9,7 @@ import { logger } from '../logger';
  * The function is also called by the devSetupPlugin to ensure the ClarionMenu.tsx file exists before starting the server.
  */
 
-export const clarionDynamicMenu = (file: string, timestamp: number) => {
-  const fileParts = file.split('/');
-  const filename = fileParts[fileParts.length - 1];
-  if (filename !== 'package.json') return;
-
-  console.log(`${timestamp}: ${file} updated`);
-  logger(`${file} updated`);
-
+export const clarionDynamicMenu = () => {
   const clarionPackage = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
   const dependencies = Object.keys(clarionPackage.dependencies);
   const packages = {};
