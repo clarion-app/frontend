@@ -10,8 +10,8 @@ import { clarionDynamicMenu } from './vite-plugins/clarionDynamicMenu';
 export const devSetupPlugin = () => ({
   name: 'dev-setup-plugin',
   configureServer() {
-    clarionDynamicRoutes('./package.json', Date.now());
-    clarionDynamicMenu('./package.json', Date.now());
+    clarionDynamicRoutes();
+    clarionDynamicMenu();
   }
 });
 
