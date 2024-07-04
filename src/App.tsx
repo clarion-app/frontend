@@ -12,6 +12,7 @@ function App() {
   return (
     <>
       <ClarionMenu />
+      <ClarionRoutes />
       <input type="text" id="package" placeholder="Package Name" />
       <button onClick = {() => {
         const packageName = (document.getElementById('package') as HTMLInputElement).value;
@@ -21,7 +22,6 @@ function App() {
         const packageName = (document.getElementById('package') as HTMLInputElement).value;
         packageAction('uninstall', packageName);
         }}>Uninstall</button>
-      <ClarionRoutes />
     </>
   )
 }
