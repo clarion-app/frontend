@@ -3,7 +3,7 @@ import { logger } from '../logger';
 
 const npmCommand = "./node_modules/.bin/npm";
 
-export const clarionInstallPackagePlugin = () => ({
+export const installPackagePlugin = () => ({
     name: 'clarion-install-package',
     configureServer(server) {
       server.ws.on('frontend:from-client', (data) => {
