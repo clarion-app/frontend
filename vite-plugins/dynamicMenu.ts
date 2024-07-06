@@ -3,7 +3,7 @@ import * as fs from 'fs';
 /* 
  * This function is used to dynamically generate a menu for the Clarion app.
  * It reads the package.json file and looks for dependencies that have customFields.routes in their package.json.
- * It then generates a ClarionMenu.tsx file that contains the menu for the Clarion app.
+ * It then generates a src/build/Menu.tsx file that contains the menu for the Clarion app.
  * The generated file is used by App.tsx
  * The function is called by the dynamicRebuildPlugin when package.json is updated.
  * The function is also called by the devSetupPlugin to ensure the ClarionMenu.tsx file exists before starting the server.
@@ -28,7 +28,7 @@ export const dynamicMenu = () => {
     }
   });
 
-  let output = 'export const ClarionMenu = () => {\n';
+  let output = 'export const Menu = () => {\n';
   output += '  return (\n';
   output += '    <div>\n';
   output += '      <div>\n'
@@ -46,5 +46,5 @@ export const dynamicMenu = () => {
   output += '    </div>\n';
   output += '  );\n';
   output += '};\n';
-  fs.writeFileSync('./src/ClarionMenu.tsx', output, 'utf8');
+  fs.writeFileSync('./src/build/Menu.tsx', output, 'utf8');
 };

@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react'
 import { installPackagePlugin } from './vite-plugins/installPackagePlugin';
@@ -12,6 +13,12 @@ import { dynamicPackageInitializer } from './vite-plugins/dynamicPackageInitiali
 export const devSetupPlugin = () => ({
   name: 'dev-setup-plugin',
   configureServer() {
+    if (!fs.existsSync('./src/build')) {
+      fs.mkdirSync('./src/build');
+    }
+    if(!fs.existsSync('./src/build/store')) {
+      fs.mkdirSync('./src/build/store');
+    }
     dynamicRoutes();
     dynamicMenu();
     dynamicBackend();

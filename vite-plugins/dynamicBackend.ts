@@ -13,5 +13,5 @@ export const dynamicBackend = () => {
   if(!clarionPackage.customFields || !clarionPackage.customFields.backendUrl) return;
 
   const output = `export const backendUrl = "${clarionPackage.customFields.backendUrl}";\n`;
-  fs.writeFileSync('./src/backendUrl.ts', output, 'utf8');
+  fs.writeFileSync('./src/build/backendUrl.ts', output, 'utf8');
 };

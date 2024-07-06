@@ -4,7 +4,7 @@ import { PackageDataType } from '@clarion-app/types';
 /* 
  * This function is used to dynamically generate the store for the Clarion app.
  * It reads the package.json file and looks for dependencies that have customFields.api in their package.json.
- * It then generates a store/index.ts file that contains the redux store for the Clarion app.
+ * It then generates a src/build/store/index.ts file that contains the redux store for the Clarion app.
  * The generated store is used by main.tsx
  * The function is called by the dynamicRebuildPlugin when package.json is updated.
  * The function is also called by the devSetupPlugin to ensure the store exists before starting the server.
@@ -56,5 +56,5 @@ export const dynamicStore = () => {
   output += '  unknown,\n';
   output += '  Action<string>\n';
   output += '>;\n';
-  fs.writeFileSync('./src/store/index.ts', output, 'utf8');
+  fs.writeFileSync('./src/build/store/index.ts', output, 'utf8');
 };

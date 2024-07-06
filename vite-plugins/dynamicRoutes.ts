@@ -42,5 +42,5 @@ export const dynamicRoutes = () => {
   output += '    </Routes>\n';
   output += '  );\n';
   output += '};\n';
-  fs.writeFileSync('./src/ClarionRoutes.tsx', output, 'utf8');
+  fs.writeFileSync('./src/build/ClarionRoutes.tsx', output, 'utf8');
 };

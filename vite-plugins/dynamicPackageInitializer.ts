@@ -2,10 +2,10 @@ import * as fs from 'fs';
 import { PackageDataType } from '@clarion-app/types';
 
 /* 
- * This function is used to dynamically generate src/initializePackages.ts for the Clarion app.
+ * This function is used to dynamically generate src/build/initializePackages.ts for the Clarion app.
  * It reads the package.json file and looks for dependencies that have customFields.packageInitializer in their package.json.
  * It then generates an initializePackage function that calls each initializer.
- * The generated function is used by src/store/index.ts
+ * The generated function is used by src/build/store/index.ts
  * The function is called by the dynamicRebuildPlugin when package.json is updated.
  * The function is also called by the devSetupPlugin to ensure the store exists before starting the server.
  */
@@ -40,5 +40,5 @@ export const dynamicPackageInitializer = () => {
   });
   output += '}\n';
 
-  fs.writeFileSync('./src/initializePackages.ts', output);
+  fs.writeFileSync('./src/build/initializePackages.ts', output);
 };

@@ -1,5 +1,5 @@
-import { ClarionRoutes } from "./ClarionRoutes";
-import { ClarionMenu } from "./ClarionMenu";
+import { ClarionRoutes } from "./build/ClarionRoutes";
+import { Menu } from "./build/Menu";
 
 function App() {
   // Tells the dev server to install or uninstall a package.
@@ -12,7 +12,7 @@ function App() {
   
   return (
     <>
-      <ClarionMenu />
+      <Menu />
       <ClarionRoutes />
       <input type="text" id="package" placeholder="Package Name" />
       <button onClick = {() => packageAction('install')}>Install</button>
