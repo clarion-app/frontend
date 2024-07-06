@@ -15,7 +15,7 @@ export const dynamicStore = () => {
   const dependencies = Object.keys(clarionPackage.dependencies);
 
   const imports: string[] = [ 
-    'import { configureStore } from "@reduxjs/toolkit";',
+    'import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";',
     'import { initializePackages } from "../initializePackages";'
   ];
   const packages: { [key:string]: PackageDataType } = {};
@@ -29,10 +29,6 @@ export const dynamicStore = () => {
       imports.push(`import { ${packages[dependency].api} } from "${dependency}";`);
     }
   });
-
-  if(Object.keys(packages).length !== 0) {
-    imports.unshift('import { ThunkAction, Action } from "@reduxjs/toolkit";');
-  }
   
   let output = imports.join('\n');
   output += '\n\n';
