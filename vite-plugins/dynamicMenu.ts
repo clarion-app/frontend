@@ -34,6 +34,7 @@ export const dynamicMenu = () => {
   output += '      <div>\n'
   output += '        <h2>Clarion</h2>\n';
   output += '        <a href="/">Home</a>\n';
+  output += '        <a href="/package-manager">Package Manager</a>\n';
   output += '      </div>\n';
   Object.keys(packages).forEach((packageName) => {
     output += `      <div>\n`;

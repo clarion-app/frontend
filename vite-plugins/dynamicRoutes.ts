@@ -12,7 +12,10 @@ import * as fs from 'fs';
 export const dynamicRoutes = () => {
   const clarionPackage = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
   const dependencies = Object.keys(clarionPackage.dependencies);
-  const imports = ['import { Route, Routes } from "react-router-dom";'];
+  const imports = [
+    'import { Route, Routes } from "react-router-dom";',
+    'import PackageManager from "../PackageManager";'
+  ];
   const components = {};
 
   dependencies.forEach((dependency) => {
@@ -30,6 +33,7 @@ export const dynamicRoutes = () => {
   });
 
   components['div'] = '/';  // temporary fix for root route
+  components['PackageManager'] = '/package-manager';
 
   let output = imports.join('\n');
   output += '\n\n';
