@@ -9,10 +9,10 @@ function App() {
   const win = window as unknown as WindowWS;
     if (win.Echo) {
       win.Echo.channel('clarion-apps')
-          .listen('InstallNPMPackageEvent', (e: any) => {
+          .listen('.ClarionApp\\Backend\\Events\\InstallNPMPackageEvent', (e: any) => {
               console.log('Package installed:', e.package);
           })
-          .listen('UninstallNPMPackageEvent', (e: any) => {
+          .listen('.ClarionApp\\Backend\\Events\\UninstallNPMPackageEvent', (e: any) => {
               console.log('Package uninstalled:', e.package);
           });
   }
