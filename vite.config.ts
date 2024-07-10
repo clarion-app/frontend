@@ -8,6 +8,7 @@ import { dynamicMenu } from './vite-plugins/dynamicMenu';
 import { dynamicBackend } from "./vite-plugins/dynamicBackend";
 import { dynamicStore } from './vite-plugins/dynamicStore';
 import { dynamicPackageInitializer } from './vite-plugins/dynamicPackageInitializer';
+import { dynamicReverbConfig } from './vite-plugins/dynamicReverbConfig';
 
 // This plugin is to ensure ClarionRoutes.tsx and ClarionMenu.tsx exist before starting the server
 export const devSetupPlugin = () => ({
@@ -24,6 +25,7 @@ export const devSetupPlugin = () => ({
     dynamicBackend();
     dynamicStore();
     dynamicPackageInitializer();
+    dynamicReverbConfig();
   }
 });
 

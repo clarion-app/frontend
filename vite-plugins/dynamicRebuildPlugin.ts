@@ -3,6 +3,7 @@ import { dynamicRoutes } from "./dynamicRoutes";
 import { dynamicBackend } from "./dynamicBackend";
 import { dynamicStore } from "./dynamicStore";
 import { dynamicPackageInitializer } from "./dynamicPackageInitializer";
+import { dynamicReverbConfig } from "./dynamicReverbConfig";
 import { logger } from "../logger";
 
 export const dynamicRebuildPlugin = () => ({
@@ -19,5 +20,6 @@ export const dynamicRebuildPlugin = () => ({
       dynamicBackend();
       dynamicStore();
       dynamicPackageInitializer();
+      dynamicReverbConfig();
     }
   });
