@@ -27,7 +27,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+ /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -67,4 +67,20 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1em;
+  border: thin solid;
+  padding: 1em;
+  top: 0;
+}
+
+.packageMenu {
+  background-color: #eaeaea;
+  padding: 1em;
+  margin: 1em;
 }

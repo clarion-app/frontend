@@ -17,30 +17,37 @@ export const dynamicMenu = () => {
   dependencies.forEach((dependency) => {
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
-    if (packageJson.customFields && packageJson.customFields.routes) {
+    if (packageJson.customFields && packageJson.customFields.menu) {
       if (packages[dependency] === undefined) {
         packages[dependency] = {};
       }
-      const routes = packageJson.customFields.routes;
-      routes.forEach((route) => {
-        packages[dependency][route.name] = route.path;
+      const menuName = packageJson.customFields.menu.name;
+      const menuEntries = [];
+      const entries = packageJson.customFields.menu.entries;
+      entries.forEach((entry) => {
+        menuEntries[entry.name] = entry.path;
       });
+      packages[dependency] = {
+        name: menuName,
+        entries: menuEntries
+      }
     }
   });
 
   let output = 'export const Menu = () => {\n';
   output += '  return (\n';
-  output += '    <div>\n';
-  output += '      <div>\n'
+  output += '    <div className="menu">\n';
+  output += '      <div className="packageMenu">\n'
   output += '        <h2>Clarion</h2>\n';
   output += '        <a href="/">Home</a>\n';
-  output += '        <a href="/package-manager">Package Manager</a>\n';
+  output += '        <a href="/app-manager">App Manager</a>\n';
   output += '      </div>\n';
   Object.keys(packages).forEach((packageName) => {
-    output += `      <div>\n`;
-    output += `        <h2>${packageName}</h2>\n`;
-    Object.keys(packages[packageName]).forEach((el) => {
-      output += `        <a href="${packages[packageName][el]}">${el}</a>\n`;
+    const menu = packages[packageName];
+    output += `      <div className="packageMenu">\n`;
+    output += `        <h2>${menu.name}</h2>\n`;
+    Object.keys(menu.entries).forEach((el) => {
+      output += `        <a href="${menu.entries[el]}">${el}</a>\n`;
     });
     output += `      </div>\n`;
   });

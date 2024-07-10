@@ -1,6 +1,6 @@
 import { backendUrl } from "./build/backendUrl"
 
-const PackageManager = () => {
+const AppManager = () => {
   // Tells the dev server to install or uninstall a package.
   const npmPackageAction = (action: string) => {
     if (!import.meta.hot) return;
@@ -26,7 +26,28 @@ const PackageManager = () => {
       .catch(error => console.error(error));
   };
 
+  const appPackageAction = (action: string) => {
+    if(action !== 'install' && action !== 'uninstall') return;
+    const packageName = (document.getElementById('appPackage') as HTMLInputElement).value;
+    if(packageName.length === 0) return;
+    const url = `${backendUrl}/api/app/${action}`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ package: packageName })
+    }).then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+  }
+
   return <div>
+    <div>
+      <input type="text" id="appPackage" placeholder="Clarion Package Name" />
+      <button onClick = {() => appPackageAction('install')}>Install</button>
+      <button onClick = {() => appPackageAction('uninstall')}>Uninstall</button>
+    </div>
     <div>
         <input type="text" id="npmPackage" placeholder="NPM Package Name" />
         <button onClick = {() => npmPackageAction('install')}>Install</button>
@@ -40,4 +61,4 @@ const PackageManager = () => {
   </div>;
 };
 
-export default PackageManager;
+export default AppManager;
