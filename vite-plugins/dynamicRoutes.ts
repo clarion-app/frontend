@@ -21,13 +21,15 @@ export const dynamicRoutes = () => {
   dependencies.forEach((dependency) => {
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
+    const packageComponents = {};
     if (packageJson.customFields && packageJson.customFields.routes) {
       const routes = packageJson.customFields.routes;
       routes.forEach((route) => {
         const component = route.element.replace(" ", "").replace("<", "").replace("/>", "");
         components[component] = route.path;
+        packageComponents[component] = route.path;
       });
-      const importStatement = `import { ${Object.keys(components).join(', ')} } from "${dependency}";`;
+      const importStatement = `import { ${Object.keys(packageComponents).join(', ')} } from "${dependency}";`;
       imports.push(importStatement);
     }
   });
