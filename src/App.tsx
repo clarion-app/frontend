@@ -1,5 +1,5 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
-import { Menu } from "./build/Menu";
+import { Menu } from "./Menu";
 import './Echo';
 import { useEffect } from 'react';
 import { WindowWS } from "./types";

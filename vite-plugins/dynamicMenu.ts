@@ -3,10 +3,10 @@ import * as fs from 'fs';
 /* 
  * This function is used to dynamically generate a menu for the Clarion app.
  * It reads the package.json file and looks for dependencies that have customFields.routes in their package.json.
- * It then generates a src/build/Menu.tsx file that contains the menu for the Clarion app.
- * The generated file is used by App.tsx
+ * It then generates a src/build/menu.json file that contains the menu entries for the Clarion app.
+ * The generated file is used by src/Menu.tsx.
  * The function is called by the dynamicRebuildPlugin when package.json is updated.
- * The function is also called by the devSetupPlugin to ensure the ClarionMenu.tsx file exists before starting the server.
+ * The function is also called by the devSetupPlugin to ensure the menu.json file exists before starting the server.
  */
 
 export const dynamicMenu = () => {
@@ -22,7 +22,7 @@ export const dynamicMenu = () => {
         packages[dependency] = {};
       }
       const menuName = packageJson.customFields.menu.name;
-      const menuEntries = [];
+      const menuEntries = {};
       const entries = packageJson.customFields.menu.entries;
       entries.forEach((entry) => {
         menuEntries[entry.name] = entry.path;
@@ -34,25 +34,5 @@ export const dynamicMenu = () => {
     }
   });
 
-  let output = 'export const Menu = () => {\n';
-  output += '  return (\n';
-  output += '    <div className="menu">\n';
-  output += '      <div className="packageMenu">\n'
-  output += '        <h2>Clarion</h2>\n';
-  output += '        <a href="/">Home</a>\n';
-  output += '        <a href="/app-manager">App Manager</a>\n';
-  output += '      </div>\n';
-  Object.keys(packages).forEach((packageName) => {
-    const menu = packages[packageName];
-    output += `      <div className="packageMenu">\n`;
-    output += `        <h2>${menu.name}</h2>\n`;
-    Object.keys(menu.entries).forEach((el) => {
-      output += `        <a href="${menu.entries[el]}">${el}</a>\n`;
-    });
-    output += `      </div>\n`;
-  });
-  output += '    </div>\n';
-  output += '  );\n';
-  output += '};\n';
-  fs.writeFileSync('./src/build/Menu.tsx', output, 'utf8');
+  fs.writeFileSync('./src/build/menu.json', JSON.stringify(packages, null, 2), 'utf8');
 };
