@@ -27,7 +27,7 @@ export const Menu = () => {
       {keys.map((packageName) => {
         const packageMenu = menu[packageName];
         return (
-          <div key={packageName}>
+          <div key={packageName} className="mt-4">
             <p className="menu-label">{packageMenu.name}</p>
             <ul className="menu-list">
             {Object.keys(packageMenu.entries).map((entry) => {
