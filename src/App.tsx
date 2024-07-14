@@ -5,10 +5,14 @@ import useClarionEvents from "./useClarionEvents";
 function App() {
   useClarionEvents();
   return (
-    <>
-      <Menu />
-      <ClarionRoutes />
-    </>
+    <div className="container">
+      <header>
+        <Menu />
+      </header>
+      <main>
+        <ClarionRoutes />
+      </main>
+    </div>
   )
 }
 

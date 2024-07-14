@@ -42,23 +42,42 @@ const AppManager = () => {
       .catch(error => console.error(error));
   }
 
-  return <div>
-    <div>
+  return <section className="section fixed-grid has-3-cols">
+    <h1 className="title">App Manager</h1>
+    <div className="grid">
+      <div className="cell">
       <input type="text" id="appPackage" placeholder="Clarion Package Name" />
-      <button onClick = {() => appPackageAction('install')}>Install</button>
-      <button onClick = {() => appPackageAction('uninstall')}>Uninstall</button>
+      </div>
+      <div className="cell">
+      <button onClick = {() => appPackageAction('install')} className="button is-primary is-small">Install</button>
+      </div>
+      <div className="cell">
+      <button onClick = {() => appPackageAction('uninstall')} className="button is-danger is-small">Uninstall</button>
+      </div>
     </div>
-    <div>
+    <div className="grid">
+      <div className="cell">
         <input type="text" id="npmPackage" placeholder="NPM Package Name" />
-        <button onClick = {() => npmPackageAction('install')}>Install</button>
-        <button onClick = {() => npmPackageAction('uninstall')}>Uninstall</button>
       </div>
-      <div>
+      <div className="cell">
+        <button onClick = {() => npmPackageAction('install')} className="button is-primary is-small">Install</button>
+      </div>
+      <div className="cell">
+        <button onClick = {() => npmPackageAction('uninstall')} className="button is-danger is-small">Uninstall</button>
+        </div>
+      </div>
+      <div className="grid">
+        <div className="cell">
         <input type="text" id="composerPackage" placeholder="Composer Package Name" />
-        <button onClick = {() => composerPackageAction('install')}>Install</button>
-        <button onClick = {() => composerPackageAction('uninstall')}>Uninstall</button>
+        </div>
+        <div className="cell">
+        <button onClick = {() => composerPackageAction('install')} className="button is-primary is-small">Install</button>
+        </div>
+        <div className="cell">
+        <button onClick = {() => composerPackageAction('uninstall')} className="button is-danger is-small">Uninstall</button>
+        </div>
       </div>
-  </div>;
+  </section>;
 };
 
 export default AppManager;
