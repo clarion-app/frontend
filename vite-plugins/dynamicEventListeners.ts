@@ -6,7 +6,8 @@ export const dynamicEventListeners = () => {
     const imports = [
         'import { useEffect } from "react";',
         'import { WindowWS } from "@clarion-app/types";',
-        'import "../Echo";'
+        'import "../Echo";',
+        'import clarionAppsListener from "../clarionAppsListener";',
     ];
     const listeners = {};
 
@@ -25,7 +26,6 @@ export const dynamicEventListeners = () => {
     };
 
     dependencies.forEach((dependency) => {
-        const packageListeners = {};
         const path = `./node_modules/${dependency}/package.json`;
         const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
         const [org, name] = packageJson.name.split('/');
@@ -47,6 +47,7 @@ export const dynamicEventListeners = () => {
     output += '  useEffect(() => {\n';
     output += '    const win = window as unknown as WindowWS;\n\n';
     output += '    if (win.Echo) {\n';
+    output += '      clarionAppsListener();\n';
     Object.keys(listeners).forEach((listener) => {
         output += `      win.Echo.channel('${listener}')\n`;
         output += `        .listen('*', (e: any) => {\n`;
