@@ -19,6 +19,7 @@ export const dynamicRoutes = () => {
   const components = {};
 
   dependencies.forEach((dependency) => {
+    const packageComponents = {};
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
     const packageComponents = {};

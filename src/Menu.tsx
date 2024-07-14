@@ -10,6 +10,8 @@ interface MenuData {
 }
 
 const menu: MenuData = menuData;
+const keys = Object.keys(menu).sort();
+keys.unshift('@clarion-app/frontend');
 
 menu['@clarion-app/frontend'] = {
   name: 'Clarion',
@@ -20,19 +22,22 @@ menu['@clarion-app/frontend'] = {
 };
 
 export const Menu = () => {
-  const keys = Object.keys(menu).sort();
   return (
     <div className="menu">
       {keys.map((packageName) => {
         const packageMenu = menu[packageName];
         return (
-          <div className="packageMenu" key={packageName}>
-            <h2>{packageMenu.name}</h2>
+          <div key={packageName}>
+            <p className="menu-label">{packageMenu.name}</p>
+            <ul className="menu-list">
             {Object.keys(packageMenu.entries).map((entry) => {
               return (
-                <a key={entry} href={packageMenu.entries[entry]}>{entry}</a>
+                <li key={entry}>
+                  <a href={packageMenu.entries[entry]}>{entry}</a>
+                </li>
               );
             })}
+            </ul>
           </div>
         );
       })}
