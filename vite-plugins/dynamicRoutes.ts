@@ -22,6 +22,7 @@ export const dynamicRoutes = () => {
     const packageComponents = {};
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
+    const packageComponents = {};
     if (packageJson.customFields && packageJson.customFields.routes) {
       const routes = packageJson.customFields.routes;
       routes.forEach((route) => {

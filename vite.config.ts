@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths';
 import { installPackagePlugin } from './vite-plugins/installPackagePlugin';
 import { dynamicRebuildPlugin } from './vite-plugins/dynamicRebuildPlugin';
 import { dynamicRoutes } from './vite-plugins/dynamicRoutes';
@@ -34,6 +35,7 @@ export const devSetupPlugin = () => ({
 export default defineConfig({
   plugins: [
     react(),
+    tsconfigPaths(),
     dynamicRebuildPlugin(),
     installPackagePlugin(),
     devSetupPlugin()
