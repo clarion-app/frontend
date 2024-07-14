@@ -48,13 +48,6 @@ export const dynamicEventListeners = () => {
     output += '    const win = window as unknown as WindowWS;\n\n';
     output += '    if (win.Echo) {\n';
     output += '      clarionAppsListener();\n';
-    Object.keys(listeners).forEach((listener) => {
-        output += `      win.Echo.channel('${listener}')\n`;
-        output += `        .listen('*', (e: any) => {\n`;
-        output += `          console.log('${listener}:', e);\n`;
-        output += `          ${listeners[listener]}(e);\n`;
-        output += '        })\n';
-    });
     output += '    }\n\n';
     output += '    return () => {\n';
     output += '      if (win.Echo) {\n';
