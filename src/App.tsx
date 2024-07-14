@@ -1,6 +1,6 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
 import { Menu } from "./Menu";
-import useClarionEvents from "./useClarionEvents";
+import useClarionEvents from "./build/useClarionEvents";
 
 function App() {
   useClarionEvents();

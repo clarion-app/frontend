@@ -4,6 +4,7 @@ import { dynamicBackend } from "./dynamicBackend";
 import { dynamicStore } from "./dynamicStore";
 import { dynamicPackageInitializer } from "./dynamicPackageInitializer";
 import { dynamicReverbConfig } from "./dynamicReverbConfig";
+import { dynamicEventListeners } from "./dynamicEventListeners";
 import { logger } from "../logger";
 
 export const dynamicRebuildPlugin = () => ({
@@ -21,5 +22,6 @@ export const dynamicRebuildPlugin = () => ({
       dynamicStore();
       dynamicPackageInitializer();
       dynamicReverbConfig();
+      dynamicEventListeners();
     }
   });

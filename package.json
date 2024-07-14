@@ -13,7 +13,7 @@
     "set-reverb-config": "node setReverbConfig.js"
   },
   "dependencies": {
-    "@clarion-app/types": "^1.0.3",
+    "@clarion-app/types": "^1.0.4",
     "@reduxjs/toolkit": "^2.2.6",
     "fs": "^0.0.1-security",
     "laravel-echo": "github:laravel/echo",
