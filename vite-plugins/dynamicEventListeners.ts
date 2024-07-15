@@ -9,35 +9,14 @@ export const dynamicEventListeners = () => {
         'import "../Echo";',
         'import clarionAppsListener from "../clarionAppsListener";',
     ];
-    const listeners = {};
-
-    // function to take this-style-name and change it to ThisStyleName
-    const toPascalCase = (str) => {
-        return str
-            .toLowerCase()
-            .split('-')
-            .map((word, index) => {
-                if (index === 0) {
-                    return word.charAt(0).toUpperCase() + word.slice(1);
-                }
-                return word.charAt(0).toUpperCase() + word.slice(1);
-            })
-            .join('');
-    };
+    const channels = [];
 
     dependencies.forEach((dependency) => {
         const path = `./node_modules/${dependency}/package.json`;
         const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
-        const [org, name] = packageJson.name.split('/');
         if (packageJson.customFields && packageJson.customFields.eventChannels) {
             const eventChannels = packageJson.customFields.eventChannels;
-            const channels = Object.keys(eventChannels);
-            channels.forEach((channel) => {
-                const realName = eventChannels[channel];
-                const aliasedName = `${eventChannels[channel]}${toPascalCase(name)}`;
-                imports.push(`import { ${realName} as ${aliasedName} } from "${dependency}";`);
-                listeners[channel] = aliasedName;
-            });
+            channels.push(...eventChannels);
         }
     });
 
@@ -52,8 +31,8 @@ export const dynamicEventListeners = () => {
     output += '    return () => {\n';
     output += '      if (win.Echo) {\n';
     output += '        win.Echo.leaveChannel(\'clarion-apps\');\n';
-    Object.keys(listeners).forEach((listener) => {
-        output += `        win.Echo.leaveChannel('${listener}');\n`;
+    channels.forEach((channel) => {
+        output += `        win.Echo.leaveChannel('${channel}');\n`;
     });
     output += '      }\n';
     output += '    };\n';
