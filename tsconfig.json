@@ -22,9 +22,4 @@
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "build.commands": {
-      "postcss": [
-        "tailwindcss"
-      ]
-  }
 }

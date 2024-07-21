@@ -1,4 +1,4 @@
-import { WindowWS } from './types';
+import { WindowWS } from '@clarion-app/types';
 import './Echo';
 
 const clarionAppsListener = () => {
