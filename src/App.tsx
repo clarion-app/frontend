@@ -1,13 +1,25 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
-import { Menu } from "./Menu";
+import { CircleMenu  } from "./CircleMenu";
 import useClarionEvents from "./build/useClarionEvents";
+import { useState } from "react";
 
 function App() {
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+
   useClarionEvents();
   return (
-    <div className="container">
+    <div className="container"
+    style={{ height: "100vh" }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        console.log("Right click event");
+        setShowMenu(true);
+        setMenuPosition({ x: e.clientX, y: e.clientY });
+      }}
+    >
       <header>
-        <Menu />
+        <CircleMenu showMenu={showMenu} setShowMenu={setShowMenu} position={menuPosition} />
       </header>
       <main>
         <ClarionRoutes />

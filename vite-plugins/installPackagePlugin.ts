@@ -9,7 +9,7 @@ export const installPackagePlugin = () => ({
       server.ws.on('frontend:from-client', (data) => {
         if(data.install) {
           // call npm and install data.install
-          exec(`${npmCommand} install ${data.install}`, (error, stdout, stderr) => {
+          exec(`${npmCommand} install ${data.install} --legacy-peer-deps`, (error, stdout, stderr) => {
             if (error) {
               console.error(`exec error: ${error}`);
               logger(`exec error: ${error}`);
