@@ -42,6 +42,11 @@ export const CircleMenu: React.FC<CircleMenuPropsType> = (props: CircleMenuProps
     console.log(`[Display] ${position} clicked`);
   };
 
+
+  if(keys.length == 1) {
+    keys.unshift("@clarion-app/frontend");
+  }
+
   return (
     <div
       onClick={() => props.setShowMenu(false)}
