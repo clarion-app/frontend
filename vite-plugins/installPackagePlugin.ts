@@ -25,7 +25,7 @@ export const installPackagePlugin = () => ({
         }
         if(data.uninstall) {
           // call npm and uninstall data.uninstall
-          exec(`${npmCommand} uninstall ${data.uninstall}`, (error, stdout, stderr) => {
+          exec(`${npmCommand} uninstall ${data.uninstall} --legacy-peer-deps`, (error, stdout, stderr) => {
             if (error) {
               console.error(`exec error: ${error}`);
               logger(`exec error: ${error}`);

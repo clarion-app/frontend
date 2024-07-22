@@ -6,9 +6,9 @@ const AppManager = () => {
   console.log(data);
 
   // Tells the dev server to install or uninstall a package.
-  const npmPackageAction = (action: string) => {
+  const npmPackageAction = (action: string, name?: string) => {
     if (!import.meta.hot) return;
-    const packageName = (document.getElementById('npmPackage') as HTMLInputElement).value;
+    const packageName = name || (document.getElementById('npmPackage') as HTMLInputElement).value;
     if(packageName.length === 0) return;
     import.meta.hot.send('frontend:from-client', { [action]: packageName }); 
   };
@@ -41,7 +41,12 @@ const AppManager = () => {
       },
       body: JSON.stringify({ package: packageName })
     }).then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data);
+        data.forEach((app: any) => {
+          npmPackageAction(action, app);
+        });
+      })
       .catch(error => console.error(error));
   }
 
