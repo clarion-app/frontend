@@ -42,7 +42,7 @@ const AppManager = () => {
       .catch(error => console.error(error));
   }
 
-  return <section className="section fixed-grid has-3-cols">
+  return <div className="fixed-grid has-3-cols">
     <h1 className="title">App Manager</h1>
     <div className="grid">
       <div className="cell">
@@ -77,7 +77,7 @@ const AppManager = () => {
         <button onClick = {() => composerPackageAction('uninstall')} className="button is-danger is-small">Uninstall</button>
         </div>
       </div>
-  </section>;
+  </div>;
 };
 
 export default AppManager;

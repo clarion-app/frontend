@@ -14,7 +14,8 @@ export const dynamicRoutes = () => {
   const dependencies = Object.keys(clarionPackage.dependencies);
   const imports = [
     'import { Route, Routes } from "react-router-dom";',
-    'import AppManager from "../AppManager";'
+    'import AppManager from "../AppManager";',
+    'import Home from "../Home";',
   ];
   const components = {};
 
@@ -34,7 +35,7 @@ export const dynamicRoutes = () => {
     }
   });
 
-  components['div'] = '/';  // temporary fix for root route
+  components['Home'] = '/';
   components['AppManager'] = '/app-manager';
 
   let output = imports.join('\n');

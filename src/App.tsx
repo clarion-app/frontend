@@ -9,7 +9,7 @@ function App() {
 
   useClarionEvents();
   return (
-    <div className="container"
+    <div
     style={{ height: "100vh" }}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -22,7 +22,9 @@ function App() {
         <CircleMenu showMenu={showMenu} setShowMenu={setShowMenu} position={menuPosition} />
       </header>
       <main>
-        <ClarionRoutes />
+        <section className="section container">
+          <ClarionRoutes />
+        </section>
       </main>
     </div>
   )
