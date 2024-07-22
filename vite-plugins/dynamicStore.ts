@@ -16,7 +16,8 @@ export const dynamicStore = () => {
 
   const imports: string[] = [ 
     'import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";',
-    'import { initializePackages } from "../initializePackages";'
+    'import { initializePackages } from "../initializePackages";',
+    'import { appApi } from "../../appApi";'
   ];
   const packages: { [key:string]: PackageDataType } = {};
   
@@ -35,6 +36,7 @@ export const dynamicStore = () => {
   output += 'initializePackages();\n\n';
   output += 'export const store = configureStore({\n';
   output += '  reducer: {\n';
+  output += '    [appApi.reducerPath]: appApi.reducer,\n';
   Object.keys(packages).forEach((dependency) => {
     const reducerPath = packages[dependency].api + '.reducerPath';
     const reducer = packages[dependency].api + '.reducer';
@@ -43,6 +45,7 @@ export const dynamicStore = () => {
   output += '  },\n';
   output += '  middleware: (getDefaultMiddleware) =>\n';
   output += '    getDefaultMiddleware()\n';
+  output += '      .concat(appApi.middleware)\n';
   Object.keys(packages).forEach((dependency) => {
     const middleware = packages[dependency].api + '.middleware';
     output += `      .concat(${middleware})\n`;

@@ -1,6 +1,10 @@
 import { backendUrl } from "./build/backendUrl"
+import { useGetAppsQuery } from "./appApi";
 
 const AppManager = () => {
+  const { data } = useGetAppsQuery(null);
+  console.log(data);
+
   // Tells the dev server to install or uninstall a package.
   const npmPackageAction = (action: string) => {
     if (!import.meta.hot) return;
@@ -26,9 +30,8 @@ const AppManager = () => {
       .catch(error => console.error(error));
   };
 
-  const appPackageAction = (action: string) => {
+  const appPackageAction = (action: string, packageName: string) => {
     if(action !== 'install' && action !== 'uninstall') return;
-    const packageName = (document.getElementById('appPackage') as HTMLInputElement).value;
     if(packageName.length === 0) return;
     const url = `${backendUrl}/api/app/${action}`;
     fetch(url, {
@@ -42,19 +45,28 @@ const AppManager = () => {
       .catch(error => console.error(error));
   }
 
-  return <div className="fixed-grid has-3-cols">
+  return <div className="fixed-grid has-4-cols">
     <h1 className="title">App Manager</h1>
+    <h2>Installed Apps</h2>
     <div className="grid">
-      <div className="cell">
-      <input type="text" id="appPackage" placeholder="Clarion Package Name" />
-      </div>
-      <div className="cell">
-      <button onClick = {() => appPackageAction('install')} className="button is-primary is-small">Install</button>
-      </div>
-      <div className="cell">
-      <button onClick = {() => appPackageAction('uninstall')} className="button is-danger is-small">Uninstall</button>
-      </div>
+      <div className="cell">App Name</div>
+      <div className="cell">Description</div>
+      <div className="cell">Package</div>
+      <div className="cell">Installed</div>
     </div>
+    {data && data.map((app: any) => {
+      return <div className="grid" key={app.id}>
+        <div className="cell">{app.title}</div>
+        <div className="cell">{app.description}</div>
+        <div className="cell">{app.package}</div>
+        <div className="cell">
+          {app.installed ? 
+          <button onClick = {() => appPackageAction('uninstall', app.package)} className="button is-danger is-small">Uninstall</button> : 
+          <button onClick = {() => appPackageAction('install', app.package)} className="button is-primary is-small">Install</button>}
+        </div>
+      </div>
+    })}
+
     <div className="grid">
       <div className="cell">
         <input type="text" id="npmPackage" placeholder="NPM Package Name" />
