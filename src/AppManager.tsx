@@ -3,8 +3,7 @@ import { useGetAppsQuery } from "./appApi";
 
 const AppManager = () => {
   const { data } = useGetAppsQuery(null);
-  console.log(data);
-
+  
   // Tells the dev server to install or uninstall a package.
   const npmPackageAction = (action: string, name?: string) => {
     if (!import.meta.hot) return;
@@ -42,7 +41,6 @@ const AppManager = () => {
       body: JSON.stringify({ package: packageName })
     }).then(response => response.json())
       .then(data => {
-        console.log(data);
         data.forEach((app: any) => {
           npmPackageAction(action, app);
         });
@@ -60,7 +58,7 @@ const AppManager = () => {
       <div className="cell">Installed</div>
     </div>
     {data && data.map((app: any) => {
-      return <div className="grid" key={app.id}>
+      return <div className="grid" key={app.package}>
         <div className="cell">{app.title}</div>
         <div className="cell">{app.description}</div>
         <div className="cell">{app.package}</div>
