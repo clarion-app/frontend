@@ -17,7 +17,10 @@ export const dynamicStore = () => {
   const imports: string[] = [ 
     'import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";',
     'import { initializePackages } from "../initializePackages";',
-    'import { appApi } from "../../appApi";'
+    'import { appApi } from "../../appApi";',
+    'import { userApi } from "../../user/userApi";',
+    'import tokenReducer from "../../user/tokenSlice";',
+    'import loggedInUserReducer from "../../user/loggedInUserSlice";',
   ];
   const packages: { [key:string]: PackageDataType } = {};
   
@@ -36,7 +39,10 @@ export const dynamicStore = () => {
   output += 'initializePackages();\n\n';
   output += 'export const store = configureStore({\n';
   output += '  reducer: {\n';
+  output += '    token: tokenReducer,\n';
+  output += '    loggedInUser: loggedInUserReducer,\n';
   output += '    [appApi.reducerPath]: appApi.reducer,\n';
+  output += '    [userApi.reducerPath]: userApi.reducer,\n';
   Object.keys(packages).forEach((dependency) => {
     const reducerPath = packages[dependency].api + '.reducerPath';
     const reducer = packages[dependency].api + '.reducer';
@@ -46,11 +52,20 @@ export const dynamicStore = () => {
   output += '  middleware: (getDefaultMiddleware) =>\n';
   output += '    getDefaultMiddleware()\n';
   output += '      .concat(appApi.middleware)\n';
+  output += '      .concat(userApi.middleware)\n';
   Object.keys(packages).forEach((dependency) => {
     const middleware = packages[dependency].api + '.middleware';
     output += `      .concat(${middleware})\n`;
   });
   output += '});\n\n';
+
+  output += 'store.subscribe(() => {\n';
+  output += '  const state = store.getState();\n';
+  output += '  localStorage.setItem("token", state.token.value);\n';
+  output += '  localStorage.setItem("name", state.loggedInUser.value.name);\n';
+  output += '  localStorage.setItem("email", state.loggedInUser.value.email);\n';
+  output += '});\n\n';
+
   output += 'export type AppDispatch = typeof store.dispatch;\n';
   output += 'export type RootState = ReturnType<typeof store.getState>;\n';
   output += 'export type AppThunk<ReturnType = void> = ThunkAction<\n';
