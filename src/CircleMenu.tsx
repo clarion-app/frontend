@@ -11,8 +11,10 @@ keys.unshift("@clarion-app/frontend");
 menu["@clarion-app/frontend"] = {
   name: "Clarion",
   entries: {
-    Home: "/",
+    "Home": "/",
     "App Manager": "/app-manager",
+    "Users": "/users",
+    "New User": "/users/new",
   },
 };
 

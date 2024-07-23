@@ -16,6 +16,8 @@ export const dynamicRoutes = () => {
     'import { Route, Routes } from "react-router-dom";',
     'import AppManager from "../AppManager";',
     'import Home from "../Home";',
+    'import { Users } from "../user/Users";',
+    'import { NewUser } from "../user/NewUser";',
   ];
   const components = {};
 
@@ -37,6 +39,8 @@ export const dynamicRoutes = () => {
 
   components['Home'] = '/';
   components['AppManager'] = '/app-manager';
+  components['Users'] = '/users';
+  components['NewUser'] = '/users/new';
 
   let output = imports.join('\n');
   output += '\n\n';
