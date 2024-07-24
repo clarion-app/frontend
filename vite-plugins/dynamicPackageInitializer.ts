@@ -26,6 +26,11 @@ export const dynamicPackageInitializer = () => {
       packages[dependency] = packageJson.customFields;
       imports.push(`import { ${packages[dependency].initializer} } from "${dependency}";`);
     }
+
+    if(packageJson.customFields.setToken) {
+      packages[dependency] = packageJson.customFields;
+      imports.push(`import { ${packages[dependency].setToken} } from "${dependency}";`);
+    }
   });
 
   if(Object.keys(packages).length !== 0) {
@@ -38,7 +43,12 @@ export const dynamicPackageInitializer = () => {
   Object.keys(packages).forEach((dependency) => {
     output += `  ${packages[dependency].initializer}(backendUrl);\n`;
   });
-  output += '}\n';
+  output += '}\n\n';
+  output += 'export const setPackageToken = (token: string) => {\n';
+  Object.keys(packages).forEach((dependency) => {
+    output += `  ${packages[dependency].setToken}(token);\n`;
+  });
+  output += '}\n\n';
 
   fs.writeFileSync('./src/build/initializePackages.ts', output);
 };

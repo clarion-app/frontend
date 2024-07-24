@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { UserType } from "../types";
 import { useAddUserMutation } from "./userApi";
+import { useAppDispatch } from "../hooks";
+import { setToken } from "./tokenSlice";
+import { setLoggedInUser } from "./loggedInUserSlice";
 
 export const NewUser = () => {
+  const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,7 +14,7 @@ export const NewUser = () => {
   const [page, setPage] = useState(1);
   const [addUser] = useAddUserMutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const user: Partial<UserType> = {
       name: name,
@@ -18,8 +22,19 @@ export const NewUser = () => {
       password: password,
       c_password: c_password,
     };
-    console.log(user);
-    addUser(user);
+    
+    const result = await addUser(user);
+    if (result.data?.token) {
+      dispatch(setToken(result.data.token));
+    }
+    if (result.data?.user) {
+      dispatch(
+        setLoggedInUser({
+          name: result.data.user.name,
+          email: result.data.user.email,
+        })
+      );
+    }
   };
 
   const nextPage = (e: React.FormEvent) => {
@@ -33,7 +48,7 @@ export const NewUser = () => {
   };
 
   return (
-    <div>
+    <div style={{ height: "100vh", width: "50vh", margin: "auto", padding: "1%" }}>
       <form>
         {page === 1 && (
           <>
@@ -49,7 +64,7 @@ export const NewUser = () => {
         )}
         {page === 2 && (
           <>
-            <h2 className="title">What is your email address?</h2>
+            <h2 className="title">What is your email address, {name}?</h2>
             <input
               className="input"
               type="email"
@@ -89,8 +104,8 @@ export const NewUser = () => {
             <button type="submit" className="button" onClick={(e) => handleSubmit(e)}>Submit</button>
           </>
         )}
-        <div>
-        <button onClick={(e) => prevPage(e)} disabled={page <= 1 ? true : false} className="button">Previous</button>
+        <div className="mt-5">
+        <button onClick={(e) => prevPage(e)} disabled={page <= 1 ? true : false} className="button mr-2">Previous</button>
         <button onClick={(e) => nextPage(e)} disabled={page >= 5 ? true : false} className="button">Next</button>
         </div>
       </form>

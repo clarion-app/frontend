@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Menu, MenuItem, SubMenu } from "@spaceymonk/react-radial-menu";
-
+import { useAppDispatch } from "./hooks";
+import { resetAllApiStates } from './build/store';
+import { setLoggedInUser } from "./user/loggedInUserSlice";
+import { setToken } from "./user/tokenSlice";
 import menuData from "./build/menu.json";
 import { MenuDataType } from "./types";
 
@@ -25,13 +29,22 @@ interface CircleMenuPropsType {
 }
 
 export const CircleMenu: React.FC<CircleMenuPropsType> = (props: CircleMenuPropsType) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  
+  const logout = () => {
+    resetAllApiStates();
+    dispatch(setToken(""));
+    dispatch(setLoggedInUser({ name: "", email: ""}));
+  };
+
   const handleItemClick = (
     _event: React.MouseEvent,
     _index: number,
     data: string
   ) => {
     props.setShowMenu(false);
-    window.location.href = data;
+    navigate(data);
   };
   const handleSubMenuClick = (
     _event: React.MouseEvent,
@@ -44,10 +57,6 @@ export const CircleMenu: React.FC<CircleMenuPropsType> = (props: CircleMenuProps
     console.log(`[Display] ${position} clicked`);
   };
 
-
-  if(keys.length == 1) {
-    keys.unshift("@clarion-app/frontend");
-  }
 
   return (
     <div
@@ -97,6 +106,13 @@ export const CircleMenu: React.FC<CircleMenuPropsType> = (props: CircleMenuProps
             </SubMenu>
           );
         })}
+        <MenuItem
+          onItemClick={() => {
+            logout();
+          }}
+        >
+          Logout
+        </MenuItem>
       </Menu>
     </div>
   );

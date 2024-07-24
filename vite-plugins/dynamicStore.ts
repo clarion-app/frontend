@@ -17,6 +17,7 @@ export const dynamicStore = () => {
   const imports: string[] = [ 
     'import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";',
     'import { initializePackages } from "../initializePackages";',
+    'import { setPackageToken } from "../initializePackages";',
     'import { appApi } from "../../appApi";',
     'import { userApi } from "../../user/userApi";',
     'import tokenReducer from "../../user/tokenSlice";',
@@ -64,7 +65,14 @@ export const dynamicStore = () => {
   output += '  localStorage.setItem("token", state.token.value);\n';
   output += '  localStorage.setItem("name", state.loggedInUser.value.name);\n';
   output += '  localStorage.setItem("email", state.loggedInUser.value.email);\n';
+  output += '  setPackageToken(state.token.value);\n';
   output += '});\n\n';
+
+  output += 'export const resetAllApiStates = () => {\n';
+  Object.keys(packages).forEach((dependency) => {
+    output += `  store.dispatch(${packages[dependency].api}.util.resetApiState());\n`;
+  });
+  output += '};\n\n';
 
   output += 'export type AppDispatch = typeof store.dispatch;\n';
   output += 'export type RootState = ReturnType<typeof store.getState>;\n';

@@ -14,4 +14,11 @@ export interface UserType extends LaravelModelType{
   email: string;
   password?: string;
   c_password?: string;
+  email_verified_at?: string;
+}
+
+export interface LoginAnswerType {
+  token?: string;
+  user?: UserType;
+  message?: string;
 }
