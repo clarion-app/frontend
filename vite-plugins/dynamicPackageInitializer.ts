@@ -45,6 +45,7 @@ export const dynamicPackageInitializer = () => {
   });
   output += '}\n\n';
   output += 'export const setPackageToken = (token: string) => {\n';
+  output += '  if(!token) return;\n';
   Object.keys(packages).forEach((dependency) => {
     output += `  ${packages[dependency].setToken}(token);\n`;
   });
