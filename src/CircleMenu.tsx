@@ -19,6 +19,7 @@ menu["@clarion-app/frontend"] = {
     "App Manager": "/app-manager",
     "Users": "/users",
     "New User": "/users/new",
+    "Docs": "/docs",
   },
 };
 

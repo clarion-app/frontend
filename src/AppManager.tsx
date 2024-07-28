@@ -59,12 +59,11 @@ const AppManager = () => {
   return (
     <div className="fixed-grid has-4-cols">
       <h1 className="title">App Manager</h1>
-      <h2>Installed Apps</h2>
       <div className="grid">
-        <div className="cell">App Name</div>
-        <div className="cell">Description</div>
-        <div className="cell">Package</div>
-        <div className="cell">Installed</div>
+        <div className="cell subtitle">App Name</div>
+        <div className="cell subtitle">Description</div>
+        <div className="cell subtitle">Package</div>
+        <div className="cell subtitle">Actions</div>
       </div>
       {currentAction == "waiting" &&
         data &&

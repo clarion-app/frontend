@@ -18,6 +18,7 @@ export const dynamicRoutes = () => {
     'import Home from "../Home";',
     'import { Users } from "../user/Users";',
     'import { NewUser } from "../user/NewUser";',
+    'import { Docs } from "../docs/Docs";'
   ];
   const components = {};
 
@@ -41,6 +42,7 @@ export const dynamicRoutes = () => {
   components['AppManager'] = '/app-manager';
   components['Users'] = '/users';
   components['NewUser'] = '/users/new';
+  components['Docs'] = '/docs';
 
   let output = imports.join('\n');
   output += '\n\n';
