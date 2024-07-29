@@ -14,7 +14,7 @@ interface ComponentSchemaPropsType {
 
 const ComponentSchema = ({ component }: ComponentSchemaPropsType) => {
   return (
-    <div className="box has-background-black has-text-info has-text-centered">
+    <div className="box has-background-black has-text-info has-text-centered mb-5">
       <table style={{width: "100%"}}>
         <thead>
           <tr>

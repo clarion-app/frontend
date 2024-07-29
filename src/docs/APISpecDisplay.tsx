@@ -102,7 +102,7 @@ function APISpecDisplay({ apiSpec }: APISpecDisplayPropsType) {
       <div className="content">
         {apiSpec.components.schemas && Object.entries(apiSpec.components.schemas).map(([component, schema]) => (
             <div key={component}>
-                <p className="is-size-5 has-text-weight-semibold">{component}</p>
+                <p className="is-size-5 has-text-weight-semibold mt-5">{component}</p>
                 <ComponentSchema component={schema} />
             </div>
             ))}
