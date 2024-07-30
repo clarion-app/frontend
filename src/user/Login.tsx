@@ -7,7 +7,7 @@ import { setToken } from "./tokenSlice";
 import { setLoggedInUser } from "./loggedInUserSlice";
 import { backendUrl } from "../build/backendUrl";
 
-const LOGIN_API_ENDPOINT = backendUrl + "/api/user/login";
+const LOGIN_API_ENDPOINT = backendUrl + "/api/clarion/system/user/login";
 
 const Login = () => {
   const dispatch = useAppDispatch();

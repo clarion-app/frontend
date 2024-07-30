@@ -4,7 +4,7 @@ import { backendUrl } from './build/backendUrl';
 export const appApi = createApi({
     reducerPath: 'appApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: backendUrl + '/api/app',
+        baseUrl: backendUrl + '/api/clarion/system/app',
         prepareHeaders: (headers) => {
             headers.set('Content-Type', 'application/json');
             headers.set('Authorization', 'Bearer ' + (localStorage.getItem("token") || ""));

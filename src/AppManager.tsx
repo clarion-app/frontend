@@ -20,7 +20,7 @@ const AppManager = () => {
   // tells the backend server to install or uninstall a composer package
   const composerPackageAction = (action: string) => {
     if (action !== "install" && action !== "uninstall") return;
-    const url = `${backendUrl}/api/composer/${action}`;
+    const url = `${backendUrl}/api/clarion/system/composer/${action}`;
     const packageName = (
       document.getElementById("composerPackage") as HTMLInputElement
     ).value;
@@ -46,7 +46,7 @@ const AppManager = () => {
       setCurrentAction("uninstalling");
     }
     if (packageName.length === 0) return;
-    const url = `${backendUrl}/api/app/${action}`;
+    const url = `${backendUrl}/api/clarion/system/app/${action}`;
     postAndThen(url, { package: packageName }, (data: any) => {
       data.forEach((app: any) => {
         npmPackageAction(action, app);
