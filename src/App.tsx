@@ -6,7 +6,7 @@ import { useAppSelector } from "./hooks";
 import { selectLoggedInUser } from "./user/loggedInUserSlice";
 import { selectToken } from "./user/tokenSlice";
 import Login from "./user/Login";
-import { useGetUsersQuery } from "./user/userApi";
+import { useUsersExistQuery } from "./user/userApi";
 import { NewUser } from "./user/NewUser";
 
 function App() {
@@ -14,12 +14,12 @@ function App() {
   const loggedInUser = useAppSelector(selectLoggedInUser);
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const { data: users } = useGetUsersQuery({});
+  const { data: users } = useUsersExistQuery({});
 
   useClarionEvents();
 
   if(!token) {
-    if(users && users.length > 0) {
+    if(users) {
       return <Login />;
     }
     return <NewUser />;
@@ -34,7 +34,7 @@ function App() {
         setMenuPosition({ x: e.clientX, y: e.clientY });
       }}
     >
-      <header>
+      <header className="header container">
         <h3 className="title">{loggedInUser.name}</h3>
         <CircleMenu showMenu={showMenu} setShowMenu={setShowMenu} position={menuPosition} />
       </header>

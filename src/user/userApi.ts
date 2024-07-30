@@ -5,15 +5,19 @@ export const userApi = (() => {
     const api = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: backendUrl + '/api/user',
+        baseUrl: backendUrl + '/api/clarion/system/user',
         prepareHeaders: (headers) => {
             headers.set("Accept", "application/json");
             headers.set("Content-Type", "application/json");
+            headers.set('Authorization', 'Bearer ' + (localStorage.getItem("token") || ""));
             return headers;
         }
     }),
     tagTypes: ['User'],
     endpoints: (builder) => ({
+        usersExist: builder.query({
+        query: () => 'exists',
+        }),
         getUsers: builder.query({
         query: () => '',
         providesTags: ['User'],
@@ -56,4 +60,5 @@ export const {
     useAddUserMutation,
     useDeleteUserMutation,
     useUpdateUserMutation,
+    useUsersExistQuery,
 } = userApi;

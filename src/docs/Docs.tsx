@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import APISpecDisplay, { APISpecType } from "./APISpecDisplay";
 
 export const Docs = () => {
-  const [spec, setSpec] = useState<APISpecType>({ paths: {}, components: {} });
+  const [spec, setSpec] = useState<APISpecType>({ paths: {}, components: {}, server: "" });
 
   const url = `${backendUrl}/docs/api.json`;
 
   useEffect(() => {
     getAndThen(url, (data: any) => {
       if (data) {
-        setSpec({ paths: data.paths, components: data.components });
+        setSpec({ paths: data.paths, components: data.components, server: data.servers[0].url });
       }
     });
   }, [url]);

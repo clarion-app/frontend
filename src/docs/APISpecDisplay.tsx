@@ -36,9 +36,10 @@ export interface APISpecType {
   paths: {
     [path: string]: PathMethodsType;
   };
-    components: {
-        [component: string]: object;
-    };
+  components: {
+    [component: string]: object;
+  };
+  server: string;
 }
 
 interface APISpecDisplayPropsType {
@@ -53,7 +54,7 @@ function APISpecDisplay({ apiSpec }: APISpecDisplayPropsType) {
       <div className="content">
         {Object.entries(apiSpec.paths).map(([path, methods]) => (
           <div key={path}>
-            <p className="is-size-5 has-text-weight-semibold">{path}</p>
+            <p className="is-size-5 has-text-weight-semibold">{apiSpec.server}{path}</p>
             <ul>
               {Object.entries(methods).map(([method, details]) => (
                 <li key={method}>
@@ -98,14 +99,21 @@ function APISpecDisplay({ apiSpec }: APISpecDisplayPropsType) {
           </div>
         ))}
       </div>
-      <h2 className="title" id="component-schemas">Component Schemas</h2>
+      <h2 className="title" id="component-schemas">
+        Component Schemas
+      </h2>
       <div className="content">
-        {apiSpec.components.schemas && Object.entries(apiSpec.components.schemas).map(([component, schema]) => (
-            <div key={component}>
-                <p className="is-size-5 has-text-weight-semibold mt-5">{component}</p>
+        {apiSpec.components.schemas &&
+          Object.entries(apiSpec.components.schemas).map(
+            ([component, schema]) => (
+              <div key={component}>
+                <p className="is-size-5 has-text-weight-semibold mt-5">
+                  {component}
+                </p>
                 <ComponentSchema component={schema} />
-            </div>
-            ))}
+              </div>
+            )
+          )}
       </div>
     </div>
   );
