@@ -14,12 +14,20 @@ function App() {
   const loggedInUser = useAppSelector(selectLoggedInUser);
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const { data: users } = useUsersExistQuery({});
+  const { data } = useUsersExistQuery({}, {
+    pollingInterval: 5000  // Poll every 5000 milliseconds (5 seconds)
+  });
 
   useClarionEvents();
 
   if(!token) {
-    if(users) {
+    if(!data.blockchainCreated) {
+      return <div>
+        Create a blockchain
+      </div>;
+    }
+
+    if(data.usersExist) {
       return <Login />;
     }
     return <NewUser />;
