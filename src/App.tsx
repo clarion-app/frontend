@@ -10,15 +10,24 @@ import { useUsersExistQuery } from "./user/userApi";
 import { NewUser } from "./user/NewUser";
 
 function App() {
+  const [shouldPoll, setShouldPoll] = useState(true);
   const token = useAppSelector(selectToken);
   const loggedInUser = useAppSelector(selectLoggedInUser);
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const { data } = useUsersExistQuery({}, {
-    pollingInterval: 5000  // Poll every 5000 milliseconds (5 seconds)
+  const { data, isLoading } = useUsersExistQuery({}, {
+    pollingInterval: shouldPoll ? 5000 : undefined
   });
 
   useClarionEvents();
+
+  if(isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if(data.blockchainCreated && data.usersExist) {
+    setShouldPoll(false);
+  }
 
   if(!token) {
     if(!data.blockchainCreated) {
