@@ -1,13 +1,45 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
 import { CircleMenu  } from "./CircleMenu";
 import useClarionEvents from "./build/useClarionEvents";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "./hooks";
 import { selectLoggedInUser } from "./user/loggedInUserSlice";
 import { selectToken } from "./user/tokenSlice";
 import Login from "./user/Login";
 import { useUsersExistQuery } from "./user/userApi";
 import { NewUser } from "./user/NewUser";
+import { backendUrl } from "./build/backendUrl";
+import { postAndThen } from "./fetchAndThen";
+
+interface BlockchainSetupPropsType {
+  shouldPoll: Function;
+}
+
+const BlockchainSetup = (props: BlockchainSetupPropsType) => {
+  const [decision, setDecision] = useState("undecided");
+
+  useEffect(() => {
+    if(decision === "create") {
+      const url = `${backendUrl}/api/clarion/system/network/create`;
+      postAndThen(url, {}, () => {
+        props.shouldPoll(true);
+      });
+    }
+    if(decision === "join") {
+      console.log("join not implemented");
+    }
+  }, [decision, props]);
+
+  return <div className="container">
+    <h1 className="title">Welcome to Clarion</h1>
+    {decision === "undecided" && (
+      <div>
+        <p>Would you like to create a new Clarion network or join an existing one?</p>
+        <button className="button" onClick={() => setDecision("create")}>Create</button>
+        <button className="button" onClick={() => setDecision("join")}>Join</button>
+      </div>)}
+  </div>;
+}
 
 function App() {
   const [shouldPoll, setShouldPoll] = useState(true);
@@ -20,22 +52,21 @@ function App() {
   });
 
   useClarionEvents();
+  useEffect(() => {
+    if(data?.blockchainCreated && data?.usersExist) {
+      setShouldPoll(false);
+    }
+  }, [data]);
 
   if(isLoading) {
     return <div>Loading...</div>;
   }
 
-  if(data.blockchainCreated && data.usersExist) {
-    setShouldPoll(false);
+  if(!data.blockchainCreated) {
+    return <BlockchainSetup shouldPoll={setShouldPoll} />;
   }
 
   if(!token) {
-    if(!data.blockchainCreated) {
-      return <div>
-        Create a blockchain
-      </div>;
-    }
-
     if(data.usersExist) {
       return <Login />;
     }
