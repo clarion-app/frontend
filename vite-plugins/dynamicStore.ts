@@ -16,12 +16,12 @@ export const dynamicStore = () => {
 
   const imports: string[] = [ 
     'import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";',
-    'import { initializePackages } from "../initializePackages";',
-    'import { setPackageToken } from "../initializePackages";',
+    'import { initializePackages, setPackageToken } from "../initializePackages";',
     'import { appApi } from "../../appApi";',
     'import { userApi } from "../../user/userApi";',
     'import tokenReducer from "../../user/tokenSlice";',
     'import loggedInUserReducer from "../../user/loggedInUserSlice";',
+    'import { localNodesApi } from "../../localNodesApi";',
   ];
   const packages: { [key:string]: PackageDataType } = {};
   
@@ -44,6 +44,7 @@ export const dynamicStore = () => {
   output += '    loggedInUser: loggedInUserReducer,\n';
   output += '    [appApi.reducerPath]: appApi.reducer,\n';
   output += '    [userApi.reducerPath]: userApi.reducer,\n';
+  output += '    [localNodesApi.reducerPath]: localNodesApi.reducer,\n';
   Object.keys(packages).forEach((dependency) => {
     const reducerPath = packages[dependency].api + '.reducerPath';
     const reducer = packages[dependency].api + '.reducer';
@@ -54,6 +55,7 @@ export const dynamicStore = () => {
   output += '    getDefaultMiddleware()\n';
   output += '      .concat(appApi.middleware)\n';
   output += '      .concat(userApi.middleware)\n';
+  output += '      .concat(localNodesApi.middleware)\n';
   Object.keys(packages).forEach((dependency) => {
     const middleware = packages[dependency].api + '.middleware';
     output += `      .concat(${middleware})\n`;

@@ -10,6 +10,7 @@ import { useUsersExistQuery } from "./user/userApi";
 import { NewUser } from "./user/NewUser";
 import { backendUrl } from "./build/backendUrl";
 import { postAndThen } from "./fetchAndThen";
+import { LocalNodes } from "./LocalNodes";
 
 interface BlockchainSetupPropsType {
   shouldPoll: Function;
@@ -17,18 +18,28 @@ interface BlockchainSetupPropsType {
 
 const BlockchainSetup = (props: BlockchainSetupPropsType) => {
   const [decision, setDecision] = useState("undecided");
+  const [chosenNode, setChosenNode] = useState("");
 
   useEffect(() => {
-    if(decision === "create") {
-      const url = `${backendUrl}/api/clarion/system/network/create`;
-      postAndThen(url, {}, () => {
-        props.shouldPoll(true);
-      });
+    let url = '';
+    switch(decision) {
+      case "create":
+        url = `${backendUrl}/api/clarion/system/network/create`;
+        postAndThen(url, {}, () => {
+          props.shouldPoll(true);
+        });
+        break;
+        case "choose":
+          console.log('Chose ' + chosenNode);
+          url = `${backendUrl}/api/clarion/system/network/join`;
+          postAndThen(url, { node_id: chosenNode }, () => {
+            props.shouldPoll(true);
+          });
+          break;
+        default:
+          break;
     }
-    if(decision === "join") {
-      console.log("join not implemented");
-    }
-  }, [decision, props]);
+  }, [decision, props, chosenNode]);
 
   return <div className="container">
     <h1 className="title">Welcome to Clarion</h1>
@@ -38,6 +49,10 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
         <button className="button" onClick={() => setDecision("create")}>Create</button>
         <button className="button" onClick={() => setDecision("join")}>Join</button>
       </div>)}
+      {decision === "join" && <LocalNodes chooseNode={(id: string) => {
+        setChosenNode(id);
+        setDecision("choose");
+        }} />}
   </div>;
 }
 
