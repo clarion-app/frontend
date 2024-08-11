@@ -46,9 +46,11 @@ export const dynamicStore = () => {
   output += '    [userApi.reducerPath]: userApi.reducer,\n';
   output += '    [localNodesApi.reducerPath]: localNodesApi.reducer,\n';
   Object.keys(packages).forEach((dependency) => {
-    const reducerPath = packages[dependency].api + '.reducerPath';
-    const reducer = packages[dependency].api + '.reducer';
-    output += `    [${reducerPath}]: ${reducer},\n`;
+    packages[dependency].api.forEach((api) => {
+      const reducerPath = api + '.reducerPath';
+      const reducer = api + '.reducer';
+      output += `    [${reducerPath}]: ${reducer},\n`;
+    });
   });
   output += '  },\n';
   output += '  middleware: (getDefaultMiddleware) =>\n';
@@ -57,8 +59,10 @@ export const dynamicStore = () => {
   output += '      .concat(userApi.middleware)\n';
   output += '      .concat(localNodesApi.middleware)\n';
   Object.keys(packages).forEach((dependency) => {
-    const middleware = packages[dependency].api + '.middleware';
+    packages[dependency].api.forEach((api) => {
+    const middleware = api + '.middleware';
     output += `      .concat(${middleware})\n`;
+    });
   });
   output += '});\n\n';
 

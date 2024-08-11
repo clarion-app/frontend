@@ -30,7 +30,7 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
         });
         break;
         case "choose":
-          console.log('Chose ' + chosenNode);
+          console.log('Chose ', chosenNode);
           url = `${backendUrl}/api/clarion/system/network/join`;
           postAndThen(url, { node_id: chosenNode }, () => {
             props.shouldPoll(true);
