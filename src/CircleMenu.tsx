@@ -36,7 +36,7 @@ export const CircleMenu: React.FC<CircleMenuPropsType> = (props: CircleMenuProps
   const logout = () => {
     resetAllApiStates();
     dispatch(setToken(""));
-    dispatch(setLoggedInUser({ name: "", email: ""}));
+    dispatch(setLoggedInUser({ id:"", name: "", email: ""}));
   };
 
   const handleItemClick = (

@@ -54,6 +54,7 @@ export const NewUser: React.FC = () => {
       }
       if (result.data?.user) {
         dispatch(setLoggedInUser({
+          id: result.data.user.id,
           name: result.data.user.name,
           email: result.data.user.email,
         }));

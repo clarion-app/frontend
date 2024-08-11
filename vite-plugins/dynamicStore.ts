@@ -60,8 +60,8 @@ export const dynamicStore = () => {
   output += '      .concat(localNodesApi.middleware)\n';
   Object.keys(packages).forEach((dependency) => {
     packages[dependency].api.forEach((api) => {
-    const middleware = api + '.middleware';
-    output += `      .concat(${middleware})\n`;
+      const middleware = api + '.middleware';
+      output += `      .concat(${middleware})\n`;
     });
   });
   output += '});\n\n';
@@ -71,12 +71,15 @@ export const dynamicStore = () => {
   output += '  localStorage.setItem("token", state.token.value);\n';
   output += '  localStorage.setItem("name", state.loggedInUser.value.name);\n';
   output += '  localStorage.setItem("email", state.loggedInUser.value.email);\n';
+  output += '  localStorage.setItem("id", state.loggedInUser.value.id);\n';
   output += '  setPackageToken(state.token.value);\n';
   output += '});\n\n';
 
   output += 'export const resetAllApiStates = () => {\n';
   Object.keys(packages).forEach((dependency) => {
-    output += `  store.dispatch(${packages[dependency].api}.util.resetApiState());\n`;
+    packages[dependency].api.forEach((api) => {
+        output += `  store.dispatch(${api}.util.resetApiState());\n`;
+    });
   });
   output += '};\n\n';
 

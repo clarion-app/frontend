@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../build/store';
 
 interface LoggedInUserType {
+  id: string;
   name: string;
   email: string;
 }
@@ -13,6 +14,7 @@ export interface LoggedInUserState {
 
 const initialState: LoggedInUserState = {
   value: {
+    id: localStorage.getItem("id") || "",
     name: localStorage.getItem("name") || "",
     email: localStorage.getItem("email") || ""
   },
