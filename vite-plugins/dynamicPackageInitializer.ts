@@ -22,13 +22,14 @@ export const dynamicPackageInitializer = () => {
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
     if(!packageJson.customFields) return;
-    if (packageJson.customFields.initializer) {
-      packages[dependency] = packageJson.customFields;
+    if(!packageJson.customFields.clarion) return;
+    const clarion = packageJson.customFields.clarion;
+    packages[dependency] = clarion;
+    if (clarion.initializer) {
       imports.push(`import { ${packages[dependency].initializer} } from "${dependency}";`);
     }
 
-    if(packageJson.customFields.setToken) {
-      packages[dependency] = packageJson.customFields;
+    if(clarion.setToken) {
       imports.push(`import { ${packages[dependency].setToken} } from "${dependency}";`);
     }
   });

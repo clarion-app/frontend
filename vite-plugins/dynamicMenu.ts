@@ -17,13 +17,14 @@ export const dynamicMenu = () => {
   dependencies.forEach((dependency) => {
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
-    if (packageJson.customFields && packageJson.customFields.menu) {
+    if (packageJson.customFields && packageJson.customFields.clarion) {
+      const clarion = packageJson.customFields.clarion;
       if (packages[dependency] === undefined) {
         packages[dependency] = {};
       }
-      const menuName = packageJson.customFields.menu.name;
+      const menuName = clarion.menu.name;
       const menuEntries = {};
-      const entries = packageJson.customFields.menu.entries;
+      const entries = clarion.menu.entries;
       entries.forEach((entry) => {
         menuEntries[entry.name] = entry.path;
       });
