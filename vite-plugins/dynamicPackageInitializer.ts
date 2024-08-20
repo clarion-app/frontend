@@ -16,39 +16,34 @@ export const dynamicPackageInitializer = () => {
 
   const imports: string[] = [
   ];
-  const packages: { [key:string]: PackageDataType } = {};
+  const prefixes: { [key:string]: string } = {};
   
   dependencies.forEach((dependency) => {
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
     if(!packageJson.customFields) return;
     if(!packageJson.customFields.clarion) return;
-    const clarion = packageJson.customFields.clarion;
-    packages[dependency] = clarion;
-    if (clarion.initializer) {
-      imports.push(`import { ${packages[dependency].initializer} } from "${dependency}";`);
-    }
-
-    if(clarion.setToken) {
-      imports.push(`import { ${packages[dependency].setToken} } from "${dependency}";`);
-    }
+    const prefix = dependency.replace('@', '_').replace('/', '_').replace(/-/g, '_');
+    prefixes[dependency] = prefix;
+    imports.push(`import { initializeFrontend as ${prefix}InitializeFrontend } from "${dependency}";`);
+    imports.push(`import { setFrontendToken as ${prefix}SetFrontendToken } from "${dependency}";`);
   });
 
-  if(Object.keys(packages).length !== 0) {
+  if(Object.keys(prefixes).length !== 0) {
     imports.unshift('import { backendUrl } from "./backendUrl"');
   }
   
   let output = imports.join('\n');
   output += '\n\n';
   output += 'export const initializePackages = () => {\n';
-  Object.keys(packages).forEach((dependency) => {
-    output += `  ${packages[dependency].initializer}(backendUrl);\n`;
+  Object.keys(prefixes).forEach((dependency) => {
+    output += `  ${prefixes[dependency]}InitializeFrontend(backendUrl);\n`;
   });
   output += '}\n\n';
   output += 'export const setPackageToken = (token: string) => {\n';
   output += '  if(!token) return;\n';
-  Object.keys(packages).forEach((dependency) => {
-    output += `  ${packages[dependency].setToken}(token);\n`;
+  Object.keys(prefixes).forEach((dependency) => {
+    output += `  ${prefixes[dependency]}SetFrontendToken(token);\n`;
   });
   output += '}\n\n';
 

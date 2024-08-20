@@ -24,15 +24,20 @@ export const dynamicStore = () => {
     'import { localNodesApi } from "../../localNodesApi";',
   ];
   const packages: { [key:string]: PackageDataType } = {};
+  const prefixes: { [key:string]: string } = {};
   
   dependencies.forEach((dependency) => {
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
     if(!packageJson.customFields) return;
-    if (packageJson.customFields.api) {
-      packages[dependency] = packageJson.customFields;
-      imports.push(`import { ${packages[dependency].api} } from "${dependency}";`);
-    }
+    if(!packageJson.customFields.clarion) return;
+    const clarion = packageJson.customFields.clarion;
+    if(!clarion.api) return;
+    prefixes[dependency] = dependency.replace('@', '_').replace('/', '_').replace(/-/g, '_');
+    packages[dependency] = clarion;
+    clarion.api.forEach((apiName) => {
+      imports.push(`import { ${apiName} as ${prefixes[dependency]}${apiName} } from "${dependency}";`);
+    });
   });
   
   let output = imports.join('\n');
@@ -46,9 +51,9 @@ export const dynamicStore = () => {
   output += '    [userApi.reducerPath]: userApi.reducer,\n';
   output += '    [localNodesApi.reducerPath]: localNodesApi.reducer,\n';
   Object.keys(packages).forEach((dependency) => {
-    packages[dependency].api.forEach((api) => {
-      const reducerPath = api + '.reducerPath';
-      const reducer = api + '.reducer';
+    packages[dependency].api.forEach((apiName) => {
+      const reducerPath = prefixes[dependency] + apiName + '.reducerPath';
+      const reducer = prefixes[dependency] + apiName + '.reducer';
       output += `    [${reducerPath}]: ${reducer},\n`;
     });
   });
@@ -59,8 +64,8 @@ export const dynamicStore = () => {
   output += '      .concat(userApi.middleware)\n';
   output += '      .concat(localNodesApi.middleware)\n';
   Object.keys(packages).forEach((dependency) => {
-    packages[dependency].api.forEach((api) => {
-      const middleware = api + '.middleware';
+    packages[dependency].api.forEach((apiName) => {
+      const middleware = prefixes[dependency] + apiName + '.middleware';
       output += `      .concat(${middleware})\n`;
     });
   });
@@ -77,8 +82,9 @@ export const dynamicStore = () => {
 
   output += 'export const resetAllApiStates = () => {\n';
   Object.keys(packages).forEach((dependency) => {
-    packages[dependency].api.forEach((api) => {
-        output += `  store.dispatch(${api}.util.resetApiState());\n`;
+    packages[dependency].api.forEach((apiName) => {
+      const api = prefixes[dependency] + apiName;
+      output += `  store.dispatch(${api}.util.resetApiState());\n`;
     });
   });
   output += '};\n\n';
