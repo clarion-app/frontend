@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 
+
+// NOT FINISHED
 export const dynamicEventListeners = () => {
     const clarionPackage = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
     const dependencies = Object.keys(clarionPackage.dependencies);

@@ -26,16 +26,18 @@ export const dynamicRoutes = () => {
     const packageComponents = {};
     const path = `./node_modules/${dependency}/package.json`;
     const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
-    if (packageJson.customFields && packageJson.customFields.routes) {
-      const routes = packageJson.customFields.routes;
-      routes.forEach((route) => {
-        const component = route.element.replace(" ", "").replace("<", "").replace("/>", "");
-        components[component] = route.path;
-        packageComponents[component] = route.path;
-      });
-      const importStatement = `import { ${Object.keys(packageComponents).join(', ')} } from "${dependency}";`;
-      imports.push(importStatement);
-    }
+    if(!packageJson.customFields) return;
+    if(!packageJson.customFields.clarion) return;
+    const clarion = packageJson.customFields.clarion;
+    if(!clarion.routes) return;
+
+    clarion.routes.forEach((route) => {
+      const component = route.element.replace(" ", "").replace("<", "").replace("/>", "");
+      components[component] = route.path;
+      packageComponents[component] = route.path;
+    });
+    const importStatement = `import { ${Object.keys(packageComponents).join(', ')} } from "${dependency}";`;
+    imports.push(importStatement);
   });
 
   components['Home'] = '/';
