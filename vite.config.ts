@@ -41,5 +41,8 @@ export default defineConfig({
     dynamicRebuildPlugin(),
     installPackagePlugin(),
     devSetupPlugin()
-  ]
+  ],
+  server: {
+    strictPort: true,
+  },
 })
