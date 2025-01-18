@@ -13,7 +13,7 @@
     "set-reverb-config": "node setReverbConfig.js"
   },
   "dependencies": {
-    "@clarion-app/types": "^1.0.6",
+    "@clarion-app/types": "^1.2.0",
     "@reduxjs/toolkit": "^2.2.6",
     "@spaceymonk/react-radial-menu": "^2.0.6",
     "fs": "^0.0.1-security",
