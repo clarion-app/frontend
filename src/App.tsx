@@ -1,5 +1,4 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
-import { CircleMenu  } from "./CircleMenu";
 import useClarionEvents from "./build/useClarionEvents";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "./hooks";
@@ -11,6 +10,8 @@ import { NewUser } from "./user/NewUser";
 import { backendUrl } from "./build/backendUrl";
 import { postAndThen } from "./fetchAndThen";
 import { LocalNodes } from "./LocalNodes";
+import { SideDrawer } from "./SideDrawer";
+import "./SideDrawer.css";
 
 interface BlockchainSetupPropsType {
   shouldPoll: Function;
@@ -60,8 +61,7 @@ function App() {
   const [shouldPoll, setShouldPoll] = useState(true);
   const token = useAppSelector(selectToken);
   const loggedInUser = useAppSelector(selectLoggedInUser);
-  const [showMenu, setShowMenu] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { data, isLoading } = useUsersExistQuery({}, {
     pollingInterval: shouldPoll ? 5000 : undefined
   });
@@ -91,16 +91,25 @@ function App() {
   return (
     <div
     style={{ height: "100vh" }}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        setShowMenu(true);
-        setMenuPosition({ x: e.clientX, y: e.clientY });
-      }}
     >
       <header className="header container">
-        <h3 className="title">{loggedInUser.name}</h3>
-        <CircleMenu showMenu={showMenu} setShowMenu={setShowMenu} position={menuPosition} />
+      <button
+          style={{
+            position: "fixed",
+            left: "1rem",
+            top: "1rem",
+            zIndex: 1100,
+          }}
+          onClick={() => setDrawerOpen(!drawerOpen)}
+        >
+          ☰
+        </button>
+        <h3 className="title" style={{ marginLeft: "3rem" }}>{loggedInUser.name}</h3>
       </header>
+      <SideDrawer
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
       <main>
         <section className="section container">
           <ClarionRoutes />
