@@ -15,7 +15,6 @@
   "dependencies": {
     "@clarion-app/types": "^1.2.0",
     "@reduxjs/toolkit": "^2.2.6",
-    "@spaceymonk/react-radial-menu": "^2.0.6",
     "fs": "^0.0.1-security",
     "laravel-echo": "github:laravel/echo",
     "npm": "^10.8.1",
