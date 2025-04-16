@@ -14,7 +14,7 @@ export const LocalNodes = (props: LocalNodesPropsType) => {
             <div key={node.node_id}>
               <div>{node.name}</div>
               <div>
-                <button onClick={() => props.chooseNode(node)}>Choose</button>
+                <button onClick={() => props.chooseNode(node.node_id)}>Choose</button>
               </div>
             </div>
         ))}
