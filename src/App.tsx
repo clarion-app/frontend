@@ -1,7 +1,7 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
 import useClarionEvents from "./build/useClarionEvents";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "./hooks";
+import { useAppSelector, useAppDispatch } from "./hooks";
 import { selectLoggedInUser } from "./user/loggedInUserSlice";
 import { selectToken } from "./user/tokenSlice";
 import Login from "./user/Login";
@@ -10,6 +10,7 @@ import { NewUser } from "./user/NewUser";
 import { backendUrl } from "./build/backendUrl";
 import { postAndThen } from "./fetchAndThen";
 import { LocalNodes } from "./node/LocalNodes";
+import { selectCurrentNode, setCurrentNode } from "./node/currentNodeSlice";
 import { SideDrawer } from "./SideDrawer";
 import "./SideDrawer.css";
 
@@ -20,6 +21,7 @@ interface BlockchainSetupPropsType {
 const BlockchainSetup = (props: BlockchainSetupPropsType) => {
   const [decision, setDecision] = useState("undecided");
   const [chosenNode, setChosenNode] = useState("");
+  const localNode = useAppSelector(selectCurrentNode);
 
   useEffect(() => {
     let url = '';
@@ -50,7 +52,7 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
         <button className="button" onClick={() => setDecision("create")}>Create</button>
         <button className="button" onClick={() => setDecision("join")}>Join</button>
       </div>)}
-    {decision === "join" && <LocalNodes chooseNode={(id: string) => {
+    {decision === "join" && <LocalNodes excludeNodes={[localNode.node_id]} chooseNode={(id: string) => {
       setChosenNode(id);
       setDecision("choose");
       }} />}
@@ -58,6 +60,7 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
 }
 
 function App() {
+  const dispatch = useAppDispatch();
   const [shouldPoll, setShouldPoll] = useState(true);
   const token = useAppSelector(selectToken);
   const loggedInUser = useAppSelector(selectLoggedInUser);
@@ -78,7 +81,7 @@ function App() {
   }
 
   if(data.node) {
-    console.log('Node: ', data.node);
+    dispatch(setCurrentNode(data.node));
   }
 
   if(!data.blockchainCreated) {
