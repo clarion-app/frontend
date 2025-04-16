@@ -9,7 +9,7 @@ import { useUsersExistQuery } from "./user/userApi";
 import { NewUser } from "./user/NewUser";
 import { backendUrl } from "./build/backendUrl";
 import { postAndThen } from "./fetchAndThen";
-import { LocalNodes } from "./LocalNodes";
+import { LocalNodes } from "./node/LocalNodes";
 import { SideDrawer } from "./SideDrawer";
 import "./SideDrawer.css";
 
@@ -30,15 +30,15 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
           props.shouldPoll(true);
         });
         break;
-        case "choose":
-          console.log('Chose ', chosenNode);
-          url = `${backendUrl}/api/clarion/system/network/join`;
-          postAndThen(url, { node_id: chosenNode }, () => {
-            props.shouldPoll(true);
-          });
-          break;
-        default:
-          break;
+      case "choose":
+        console.log('Chose ', chosenNode);
+        url = `${backendUrl}/api/clarion/system/network/join`;
+        postAndThen(url, { node_id: chosenNode }, () => {
+          props.shouldPoll(true);
+        });
+        break;
+      default:
+        break;
     }
   }, [decision, props, chosenNode]);
 
@@ -50,10 +50,10 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
         <button className="button" onClick={() => setDecision("create")}>Create</button>
         <button className="button" onClick={() => setDecision("join")}>Join</button>
       </div>)}
-      {decision === "join" && <LocalNodes chooseNode={(id: string) => {
-        setChosenNode(id);
-        setDecision("choose");
-        }} />}
+    {decision === "join" && <LocalNodes chooseNode={(id: string) => {
+      setChosenNode(id);
+      setDecision("choose");
+      }} />}
   </div>;
 }
 
@@ -75,6 +75,10 @@ function App() {
 
   if(isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if(data.node) {
+    console.log('Node: ', data.node);
   }
 
   if(!data.blockchainCreated) {

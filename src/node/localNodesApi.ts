@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { backendUrl } from './build/backendUrl';
+import { backendUrl } from '../build/backendUrl';
 
 export interface LocalNodeType {
     node_id: string;

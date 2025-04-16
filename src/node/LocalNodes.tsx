@@ -2,6 +2,7 @@ import { useGetLocalNodesQuery, LocalNodeType } from "./localNodesApi";
 
 interface LocalNodesPropsType {
     chooseNode: Function;
+    excludeNodes?: string[];
 }
 
 export const LocalNodes = (props: LocalNodesPropsType) => {
@@ -11,6 +12,7 @@ export const LocalNodes = (props: LocalNodesPropsType) => {
         <div>
         <h3>Local Nodes</h3>
         {localNodes?.map((node: LocalNodeType) => (
+            !props.excludeNodes?.includes(node.node_id) &&
             <div key={node.node_id}>
               <div>{node.name}</div>
               <div>

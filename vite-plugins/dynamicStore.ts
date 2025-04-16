@@ -21,7 +21,8 @@ export const dynamicStore = () => {
     'import { userApi } from "../../user/userApi";',
     'import tokenReducer from "../../user/tokenSlice";',
     'import loggedInUserReducer from "../../user/loggedInUserSlice";',
-    'import { localNodesApi } from "../../localNodesApi";',
+    'import { localNodesApi } from "../../node/localNodesApi";',
+    'import currentNodeReducer from "../../node/currentNodeSlice";',
   ];
   const packages: { [key:string]: PackageDataType } = {};
   const prefixes: { [key:string]: string } = {};
@@ -50,6 +51,7 @@ export const dynamicStore = () => {
   output += '    [appApi.reducerPath]: appApi.reducer,\n';
   output += '    [userApi.reducerPath]: userApi.reducer,\n';
   output += '    [localNodesApi.reducerPath]: localNodesApi.reducer,\n';
+  output += '    currentNode: currentNodeReducer,\n';
   Object.keys(packages).forEach((dependency) => {
     packages[dependency].api.forEach((apiName) => {
       const reducerPath = prefixes[dependency] + apiName + '.reducerPath';
