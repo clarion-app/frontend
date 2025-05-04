@@ -25,25 +25,29 @@ export const dynamicPackageInitializer = () => {
     if(!packageJson.customFields.clarion) return;
     const prefix = dependency.replace('@', '_').replace('/', '_').replace(/-/g, '_');
     prefixes[dependency] = prefix;
-    imports.push(`import { initializeFrontend as ${prefix}InitializeFrontend } from "${dependency}";`);
-    imports.push(`import { setFrontendToken as ${prefix}SetFrontendToken } from "${dependency}";`);
+    imports.push(`import { updateFrontend as ${prefix}UpdateFrontend } from "${dependency}";`);
   });
 
   if(Object.keys(prefixes).length !== 0) {
+    imports.unshift('import { BackendType, LoggedInUserType } from "@clarion-app/types"');
     imports.unshift('import { backendUrl } from "./backendUrl"');
   }
   
   let output = imports.join('\n');
   output += '\n\n';
-  output += 'export const initializePackages = () => {\n';
+  output += 'export const updatePackages = () => {\n';
+  output += '  const user: LoggedInUserType = {\n';
+  output += '    id: localStorage.getItem("id") || "",\n';
+  output += '    name: localStorage.getItem("name") || "",\n';
+  output += '    email: localStorage.getItem("email") || "",\n';
+  output += '  };\n';
+  output += '  const backend: BackendType = {\n';
+  output += '    url: backendUrl,\n';
+  output += '    token: localStorage.getItem("token") || "",\n';
+  output += '    user: user\n';
+  output += '  };\n';
   Object.keys(prefixes).forEach((dependency) => {
-    output += `  ${prefixes[dependency]}InitializeFrontend(backendUrl);\n`;
-  });
-  output += '}\n\n';
-  output += 'export const setPackageToken = (token: string) => {\n';
-  output += '  if(!token) return;\n';
-  Object.keys(prefixes).forEach((dependency) => {
-    output += `  ${prefixes[dependency]}SetFrontendToken(token);\n`;
+    output += `  ${prefixes[dependency]}UpdateFrontend(backend);\n`;
   });
   output += '}\n\n';
 
