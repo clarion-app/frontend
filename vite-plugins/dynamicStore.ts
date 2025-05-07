@@ -17,7 +17,6 @@ export const dynamicStore = () => {
   const imports: string[] = [ 
     'import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";',
     'import { updatePackages } from "../initializePackages";',
-    'import { backendUrl } from "../backendUrl";',
     'import { appApi } from "../../appApi";',
     'import { userApi } from "../../user/userApi";',
     'import tokenReducer from "../../user/tokenSlice";',

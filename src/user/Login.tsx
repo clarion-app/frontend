@@ -37,7 +37,7 @@ const Login = () => {
       if (response.user !== undefined) {
         dispatch(
           setLoggedInUser({
-            id: response.user.id,
+            id: response.user.id!,
             email: response.user.email,
             name: response.user.name,
           })
