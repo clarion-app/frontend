@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { installPackagePlugin } from './vite-plugins/installPackagePlugin';
 import { dynamicRebuildPlugin } from './vite-plugins/dynamicRebuildPlugin';
@@ -11,6 +11,7 @@ import { dynamicStore } from './vite-plugins/dynamicStore';
 import { dynamicPackageInitializer } from './vite-plugins/dynamicPackageInitializer';
 import { dynamicReverbConfig } from './vite-plugins/dynamicReverbConfig';
 import { dynamicEventListeners } from './vite-plugins/dynamicEventListeners';
+import { dynamicTailwind } from './vite-plugins/dynamicTailwind';
 
 // This plugin is to ensure ClarionRoutes.tsx and ClarionMenu.tsx exist before starting the server
 export const devSetupPlugin = () => ({
@@ -29,6 +30,7 @@ export const devSetupPlugin = () => ({
     dynamicPackageInitializer();
     dynamicReverbConfig();
     dynamicEventListeners();
+    dynamicTailwind();
   }
 });
 
