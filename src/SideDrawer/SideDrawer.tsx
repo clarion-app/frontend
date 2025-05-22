@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "./hooks";
-import { resetAllApiStates } from "./build/store";
-import { setToken } from "./user/tokenSlice";
-import { setLoggedInUser } from "./user/loggedInUserSlice";
-import menuData from "./build/menu.json";
-import { MenuDataType } from "./types";
+import { useAppDispatch } from "../hooks";
+import { resetAllApiStates } from "../build/store";
+import { setToken } from "../user/tokenSlice";
+import { setLoggedInUser } from "../user/loggedInUserSlice";
+import menuData from "../build/menu.json";
+import { MenuDataType } from "../types";
+import { NavButton } from "./NavButton";
+import "./SideDrawer.css";
 
 interface SideDrawerProps {
   isOpen: boolean;
@@ -73,13 +75,12 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
           <div key={key}>
             <h4 className="submenu-title">{menu[key].name}</h4>
             {entryKeys.map((entry) => (
-              <button
+              <NavButton
                 key={entry}
                 onClick={() => handleItemClick(menu[key].entries[entry])}
-                className="menu-item"
               >
                 {entry}
-              </button>
+              </NavButton>
             ))}
           </div>
         );

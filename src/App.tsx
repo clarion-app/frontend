@@ -12,7 +12,6 @@ import { postAndThen } from "./fetchAndThen";
 import { LocalNodes } from "./node/LocalNodes";
 import { selectCurrentNode, setCurrentNode } from "./node/currentNodeSlice";
 import { SideDrawer } from "./SideDrawer";
-import "./SideDrawer.css";
 
 interface BlockchainSetupPropsType {
   shouldPoll: Function;
