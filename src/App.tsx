@@ -95,6 +95,14 @@ function App() {
     return <NewUser />;
   }
 
+  if(Notification.permission === 'default') {
+    Notification.requestPermission().then(permission => {
+      if(permission === 'granted') {
+        new Notification('Clarion', { body: 'Welcome to Clarion!' });
+      }
+    });
+  }
+
   return (
     <div
     style={{ height: "100vh" }}

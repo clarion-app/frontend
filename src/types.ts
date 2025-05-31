@@ -6,6 +6,7 @@ export interface MenuDataType {
       entries: {
         [key: string]: string;
       };
+      pinnedEntries?: string[];
     };
 }
 
