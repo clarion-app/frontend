@@ -69,21 +69,21 @@ const AppManager = () => {
         data &&
         data.map((app: any) => {
           return (
-            <div className="grid" key={app.package}>
+            <div className="grid" key={app.name}>
               <div className="cell">{app.title}</div>
               <div className="cell">{app.description}</div>
-              <div className="cell">{app.package}</div>
+              <div className="cell">{app.organization}/{app.name}</div>
               <div className="cell">
                 {app.installed ? (
                   <button
-                    onClick={() => appPackageAction("uninstall", app.package)}
+                    onClick={() => appPackageAction("uninstall", `${app.organization}/${app.name}`)}
                     className="button is-danger is-small"
                   >
                     Uninstall
                   </button>
                 ) : (
                   <button
-                    onClick={() => appPackageAction("install", app.package)}
+                    onClick={() => appPackageAction("install", `${app.organization}/${app.name}`)}
                     className="button is-primary is-small"
                   >
                     Install

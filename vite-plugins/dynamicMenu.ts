@@ -30,7 +30,8 @@ export const dynamicMenu = () => {
       });
       packages[dependency] = {
         name: menuName,
-        entries: menuEntries
+        entries: menuEntries,
+        pinnedEntries: clarion.menu.pinnedEntries || []
       }
     }
   });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "./hooks";
 import { resetAllApiStates } from "./build/store";
@@ -33,6 +33,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
       "New User": "/users/new",
       Docs: "/docs",
     },
+    pinnedEntries: ["Home"]
   };
 
   const handleItemClick = (path: string) => {
@@ -47,12 +48,21 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  const toggleGroup = (groupKey: string) => {
+    setOpenGroups(prev => ({ ...prev, [groupKey]: !prev[groupKey] }));
+  };
+
   return (
     <div className={`side-drawer ${isOpen ? "open" : ""}`}>
       {keys.map((key) => {
         const entryKeys = Object.keys(menu[key].entries);
-        
-        // If there's only one entry, we can show it directly
+        const pinned = menu[key].pinnedEntries || [];
+        const pinnedKeys = entryKeys.filter(e => pinned.includes(e));
+        const otherKeys = entryKeys.filter(e => !pinned.includes(e));
+        const isGroupOpen = !!openGroups[key];
+
+        // single-entry remains unchanged
         if (entryKeys.length === 1) {
           const label = entryKeys[0];
           const path = menu[key].entries[label];
@@ -68,11 +78,24 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
           );
         }
 
-        // Otherwise, let's list them as a group
         return (
           <div key={key}>
-            <h4 className="submenu-title">{menu[key].name}</h4>
-            {entryKeys.map((entry) => (
+            <h4
+              className="submenu-title"
+              onClick={() => toggleGroup(key)}
+            >
+              {menu[key].name}
+            </h4>
+            {pinnedKeys.map(entry => (
+              <button
+                key={entry}
+                onClick={() => handleItemClick(menu[key].entries[entry])}
+                className="menu-item"
+              >
+                {entry}
+              </button>
+            ))}
+            {isGroupOpen && otherKeys.map(entry => (
               <button
                 key={entry}
                 onClick={() => handleItemClick(menu[key].entries[entry])}
