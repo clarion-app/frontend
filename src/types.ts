@@ -23,3 +23,19 @@ export interface LoginAnswerType {
   user?: UserType;
   message?: string;
 }
+
+/* 
+{
+  "componentRoutes": {
+    "ComponentName": "route/to/component",
+    "AnotherComponent": "route/to/another/component"
+  },
+  "packageName": "package-name"
+}
+*/
+export interface ImportSpec {
+  componentRoutes: {
+    [key: string]: string;
+  };
+  packageName:  string;
+}
