@@ -13,6 +13,7 @@ import { postAndThen } from "./fetchAndThen";
 import { LocalNodes } from "./node/LocalNodes";
 import { selectCurrentNode, setCurrentNode } from "./node/currentNodeSlice";
 import { SideDrawer } from "./SideDrawer";
+import ErrorBoundary from "./ErrorBoundary";
 import "./SideDrawer.css";
 
 interface BlockchainSetupPropsType {
@@ -128,7 +129,9 @@ function App() {
       />
       <main>
         <section className="section container">
-          <ClarionRoutes />
+          <ErrorBoundary>
+            <ClarionRoutes />
+          </ErrorBoundary>
         </section>
       </main>
     </div>
