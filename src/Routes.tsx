@@ -6,6 +6,7 @@ import { NewUser } from "./user/NewUser";
 import { Docs } from "./docs/Docs";
 import { ImportSpec } from './types';
 import { ComponentType } from 'react';
+import { ProtectedRoute } from './auth/ProtectedRoute';
 
 const specs: ImportSpec[] = (await import('./build/components.json', {
   assert: { type: 'json' }
@@ -26,14 +27,16 @@ await Promise.all(
 export const ClarionRoutes = () => {
   return (
     <Routes>
-      {Object.entries(components).map(([componentName, Component]) => (
-        <Route key={componentName} path={componentName} element={<Component />} />
-      ))}
       <Route path="/" element={<Home />} />
-      <Route path="/app-manager" element={<AppManager />} />
-      <Route path="/users" element={<Users />} />
       <Route path="/users/new" element={<NewUser />} />
-      <Route path="/docs" element={<Docs />} />
+      <Route element={<ProtectedRoute />}>
+        {Object.entries(components).map(([componentName, Component]) => (
+          <Route key={componentName} path={componentName} element={<Component />} />
+        ))}
+        <Route path="/app-manager" element={<AppManager />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/docs" element={<Docs />} />
+      </Route>
     </Routes>
   );
 };

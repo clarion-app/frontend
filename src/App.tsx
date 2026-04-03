@@ -1,10 +1,9 @@
 import { ClarionRoutes } from "./build/ClarionRoutes";
 // import { ClarionRoutes as NewRoutes } from "./Routes";
 import useClarionEvents from "./build/useClarionEvents";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "./hooks";
 import { selectLoggedInUser } from "./user/loggedInUserSlice";
-import { selectToken } from "./user/tokenSlice";
 import Login from "./user/Login";
 import { useUsersExistQuery } from "./user/userApi";
 import { NewUser } from "./user/NewUser";
@@ -14,6 +13,7 @@ import { LocalNodes } from "./node/LocalNodes";
 import { selectCurrentNode, setCurrentNode } from "./node/currentNodeSlice";
 import { SideDrawer } from "./SideDrawer";
 import ErrorBoundary from "./ErrorBoundary";
+import { useAuth } from "./auth/useAuth";
 import "./SideDrawer.css";
 
 interface BlockchainSetupPropsType {
@@ -24,6 +24,7 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
   const [decision, setDecision] = useState("undecided");
   const [chosenNode, setChosenNode] = useState("");
   const localNode = useAppSelector(selectCurrentNode);
+  const { shouldPoll } = props;
 
   useEffect(() => {
     let url = '';
@@ -31,20 +32,20 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
       case "create":
         url = `${backendUrl}/api/clarion/system/network/create`;
         postAndThen(url, {}, () => {
-          props.shouldPoll(true);
+          shouldPoll(true);
         });
         break;
       case "choose":
         console.log('Chose ', chosenNode);
         url = `${backendUrl}/api/clarion/system/network/join`;
         postAndThen(url, { node_id: chosenNode }, () => {
-          props.shouldPoll(true);
+          shouldPoll(true);
         });
         break;
       default:
         break;
     }
-  }, [decision, props, chosenNode]);
+  }, [decision, shouldPoll, chosenNode]);
 
   return <div className="container">
     <h1 className="title">Welcome to Clarion</h1>
@@ -64,13 +65,17 @@ const BlockchainSetup = (props: BlockchainSetupPropsType) => {
 function App() {
   const dispatch = useAppDispatch();
   const [shouldPoll, setShouldPoll] = useState(true);
-  const token = useAppSelector(selectToken);
   const loggedInUser = useAppSelector(selectLoggedInUser);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { data, isLoading } = useUsersExistQuery({}, {
+  const { data, isLoading, isError } = useUsersExistQuery({}, {
     pollingInterval: shouldPoll ? 5000 : undefined
   });
 
+  const handleShouldPoll = useCallback((value: boolean) => {
+    setShouldPoll(value);
+  }, []);
+
+  useAuth();
   useClarionEvents();
   useEffect(() => {
     if(data?.blockchainCreated && data?.usersExist) {
@@ -79,30 +84,38 @@ function App() {
   }, [data]);
 
   if(isLoading) {
-    return <div>Loading...</div>;
+    return <div role="status">Loading...</div>;
   }
 
-  if(data.node) {
+  if(isError) {
+    return <div role="alert">Unable to connect to server. Please try again.</div>;
+  }
+
+  if(data?.node) {
     dispatch(setCurrentNode(data.node));
   }
 
-  if(!data.blockchainCreated) {
-    return <BlockchainSetup shouldPoll={setShouldPoll} />;
+  if(!data?.blockchainCreated) {
+    return <BlockchainSetup shouldPoll={handleShouldPoll} />;
   }
 
-  if(!token) {
-    if(data.usersExist) {
+  if(!loggedInUser.id) {
+    if(data?.usersExist) {
       return <Login />;
     }
     return <NewUser />;
   }
 
   if(Notification.permission === 'default') {
-    Notification.requestPermission().then(permission => {
-      if(permission === 'granted') {
-        new Notification('Clarion', { body: 'Welcome to Clarion!' });
-      }
-    });
+    try {
+      Notification.requestPermission().then(permission => {
+        if(permission === 'granted') {
+          new Notification('Clarion', { body: 'Welcome to Clarion!' });
+        }
+      });
+    } catch {
+      // Notification API not available
+    }
   }
 
   return (

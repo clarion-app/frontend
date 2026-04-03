@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { postAndThen } from "../fetchAndThen";
 import { LoginAnswerType } from "../types";
 import { useAppDispatch } from "../hooks";
-import { setToken } from "./tokenSlice";
 import { setLoggedInUser } from "./loggedInUserSlice";
 import { backendUrl } from "../build/backendUrl";
+import { validateRedirect } from "../auth/validateRedirect";
 
 const LOGIN_API_ENDPOINT = backendUrl + "/api/clarion/system/user/login";
 
@@ -13,25 +13,32 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const doLogin = (e: any) => {
     e.preventDefault();
-    setMessage("");
-    const body = {
-      email: email,
-      password: password,
-    };
+    setError("");
+
+    // Client-side validation
+    if (!email || !email.includes('@')) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (!password) {
+      setError("Password is required.");
+      return;
+    }
+
+    setIsLoading(true);
+    const body = { email, password };
 
     postAndThen(LOGIN_API_ENDPOINT, body, (response: LoginAnswerType) => {
+      setIsLoading(false);
       if (response.message !== undefined) {
-        setMessage(response.message);
+        setError(response.message);
         return;
-      }
-
-      if (response.token !== undefined) {
-        dispatch(setToken(response.token));
       }
 
       if (response.user !== undefined) {
@@ -43,11 +50,14 @@ const Login = () => {
           })
         );
       }
-      const redirectURL = localStorage.getItem("redirectURL");
+
+      const rawRedirect = localStorage.getItem("redirectURL");
       localStorage.removeItem("redirectURL");
-      console.log("Redirecting to " + redirectURL);
-      if (redirectURL) navigate(redirectURL);
-      else navigate("/");
+      const safeRedirect = rawRedirect ? validateRedirect(rawRedirect) : null;
+      navigate(safeRedirect ?? "/");
+    }).catch(() => {
+      setIsLoading(false);
+      setError("Login failed. Please check your credentials and try again.");
     });
   };
 
@@ -59,7 +69,7 @@ const Login = () => {
   return (
     <div style={{ height: "100vh", width: "50vh", margin: "auto", padding: "1%" }}>
       <div className="mr-2 has-text-centered">
-        <form action="#" method="POST">
+        <form action="#" method="POST" onSubmit={doLogin}>
           <input type="hidden" name="remember" value="true" />
           <div>
               <label htmlFor="email-address">Email address</label>
@@ -100,15 +110,17 @@ const Login = () => {
             <button
               type="submit"
               className="button is-primary"
-              onClick={(e) => doLogin(e)}
+              disabled={isLoading}
             >
-              Log in
+              {isLoading ? "Logging in…" : "Log in"}
             </button>
           </div>
 
-          <div className="mt-5">
-            <div>{message}</div>
-          </div>
+          {error && (
+            <div className="mt-5" role="alert" style={{ color: '#dc3545' }}>
+              {error}
+            </div>
+          )}
         </form>
       </div>
     </div>

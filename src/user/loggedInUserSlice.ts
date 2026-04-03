@@ -14,9 +14,9 @@ export interface LoggedInUserState {
 
 const initialState: LoggedInUserState = {
   value: {
-    id: localStorage.getItem("id") || "",
-    name: localStorage.getItem("name") || "",
-    email: localStorage.getItem("email") || ""
+    id: "",
+    name: "",
+    email: ""
   },
   status: 'idle',
 };

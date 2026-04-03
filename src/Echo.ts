@@ -3,7 +3,6 @@ import Pusher from 'pusher-js';
 import reverbConfig from './build/reverbConfig.json';
 import { WindowWS } from '@clarion-app/types';
 import { backendUrl } from './build/backendUrl';
-import { store } from './build/store';
 
 const win = window as unknown as WindowWS;
 
@@ -22,8 +21,9 @@ if(!win.Echo) {
         authEndpoint: `${backendUrl}/broadcasting/auth`,
         auth: {
             headers: {
-              Authorization: "Bearer " + store.getState().token.value,
+              'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || ''),
             },
         },
+        withCredentials: true,
     });
 }

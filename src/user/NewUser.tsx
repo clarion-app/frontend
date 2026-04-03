@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { UserType } from '../types';
 import { useAddUserMutation } from './userApi';
 import { useAppDispatch } from '../hooks';
-import { setToken } from './tokenSlice';
 import { setLoggedInUser } from './loggedInUserSlice';
 
 export const NewUser: React.FC = () => {
@@ -12,6 +11,8 @@ export const NewUser: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [page, setPage] = useState<number>(1);
+  const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [addUser] = useAddUserMutation();
 
   // Refs for input fields
@@ -41,16 +42,41 @@ export const NewUser: React.FC = () => {
   }, [page]); // Dependency on page ensures effect runs on page change
 
   const handlePageChange = (newPage: number) => {
+    setError('');
     setPage(newPage);
   };
 
   const handleSubmit = async () => {
+    setError('');
+
+    // Client-side validation
+    if (!name.trim()) {
+      setError('Name is required.');
+      return;
+    }
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setIsLoading(true);
     const user: Partial<UserType> = { name, email, password, c_password: confirmPassword };
     
     try {
       const result = await addUser(user);
-      if (result.data?.token) {
-        dispatch(setToken(result.data.token));
+      setIsLoading(false);
+      if ('error' in result) {
+        const errData = (result.error as any)?.data;
+        setError(errData?.message || 'Registration failed. Please try again.');
+        return;
       }
       if (result.data?.user) {
         dispatch(setLoggedInUser({
@@ -59,8 +85,9 @@ export const NewUser: React.FC = () => {
           email: result.data.user.email,
         }));
       }
-    } catch (error) {
-      console.error('Error submitting user:', error);
+    } catch {
+      setIsLoading(false);
+      setError('An unexpected error occurred. Please try again.');
     }
   };
   
@@ -125,10 +152,15 @@ export const NewUser: React.FC = () => {
             />
           </div>
         )}
+        {error && (
+          <div className="mt-3" role="alert" style={{ color: '#dc3545' }}>
+            {error}
+          </div>
+        )}
         <div className="buttons mt-5">
           <button type="button" onClick={() => handlePageChange(page - 1)} disabled={page <= 1} className="button mr-2">Previous</button>
           {page !== 4 && <button type="button" onClick={() => handlePageChange(page + 1)} className="button">Next</button>}
-          {page === 4 && <button type="submit" className="button">Submit</button>}
+          {page === 4 && <button type="submit" className="button" disabled={isLoading}>{isLoading ? 'Creating…' : 'Submit'}</button>}
         </div>
       </form>
     </div>

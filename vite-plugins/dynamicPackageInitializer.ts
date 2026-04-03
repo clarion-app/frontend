@@ -43,7 +43,6 @@ export const dynamicPackageInitializer = () => {
   output += '  };\n';
   output += '  const backend: BackendType = {\n';
   output += '    url: backendUrl,\n';
-  output += '    token: localStorage.getItem("token") || "",\n';
   output += '    user: user\n';
   output += '  };\n';
   Object.keys(prefixes).forEach((dependency) => {

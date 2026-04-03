@@ -1,23 +1,29 @@
-import { store } from "./build/store";
+const getCsrfToken = (): string | undefined => {
+  return document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('XSRF-TOKEN='))
+    ?.split('=')[1];
+};
 
 const putPostAndThen = (method: string, url: string, data: any, andThen: Function) => {
-  const state = store.getState();
-  const token = state.token.value;
-
-  const headers = {
+  const csrfToken = getCsrfToken();
+  const headers: Record<string, string> = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
   };
+  if (csrfToken) {
+    headers['X-XSRF-TOKEN'] = decodeURIComponent(csrfToken);
+  }
 
-  fetch(url, {
+  return fetch(url, {
     method: method,
     headers: headers,
+    credentials: 'include',
     body: JSON.stringify(data)
   })
   .then((response) => {
     if(!response.ok) {
-      console.error(response);
+      throw new Error(`Request failed: ${response.status} ${response.statusText}`);
     }
 
     return response.json();
@@ -26,21 +32,18 @@ const putPostAndThen = (method: string, url: string, data: any, andThen: Functio
 };
 
 const getAndThen = (url: string, andThen: Function) => {
-  const state = store.getState();
-  const token = state.token.value;
-
   const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
   };
 
-  fetch(url, {
-    headers: headers
+  return fetch(url, {
+    headers: headers,
+    credentials: 'include',
   })
   .then((response) => {
     if(!response.ok) {
-      console.error(response);
+      throw new Error(`Request failed: ${response.status} ${response.statusText}`);
     }
 
     return response.json();
@@ -49,11 +52,11 @@ const getAndThen = (url: string, andThen: Function) => {
 };
 
 const postAndThen = (url: string, data: any, andThen: Function) => {
-  putPostAndThen("post", url, data, andThen);
+  return putPostAndThen("post", url, data, andThen);
 };
 
 const putAndThen = (url: string, data: any, andThen: Function) => {
-  putPostAndThen("put", url, data, andThen);
+  return putPostAndThen("put", url, data, andThen);
 };
 
 export { getAndThen, postAndThen, putAndThen };

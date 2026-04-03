@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 src/build
 package-lock.json
+.env

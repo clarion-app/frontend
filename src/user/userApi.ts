@@ -6,10 +6,17 @@ export const userApi = (() => {
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
         baseUrl: backendUrl + '/api/clarion/system/user',
+        credentials: 'include',
         prepareHeaders: (headers) => {
             headers.set("Accept", "application/json");
             headers.set("Content-Type", "application/json");
-            headers.set('Authorization', 'Bearer ' + (localStorage.getItem("token") || ""));
+            const csrfToken = document.cookie
+                .split('; ')
+                .find((row) => row.startsWith('XSRF-TOKEN='))
+                ?.split('=')[1];
+            if (csrfToken) {
+                headers.set('X-XSRF-TOKEN', decodeURIComponent(csrfToken));
+            }
             return headers;
         }
     }),

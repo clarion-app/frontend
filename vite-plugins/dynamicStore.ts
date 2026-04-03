@@ -21,6 +21,7 @@ export const dynamicStore = () => {
     'import { userApi } from "../../user/userApi";',
     'import tokenReducer from "../../user/tokenSlice";',
     'import loggedInUserReducer from "../../user/loggedInUserSlice";',
+    'import toastReducer from "../../notifications/toastSlice";',
     'import { localNodesApi } from "../../node/localNodesApi";',
     'import currentNodeReducer from "../../node/currentNodeSlice";',
   ];
@@ -48,6 +49,7 @@ export const dynamicStore = () => {
   output += '  reducer: {\n';
   output += '    token: tokenReducer,\n';
   output += '    loggedInUser: loggedInUserReducer,\n';
+  output += '    toast: toastReducer,\n';
   output += '    [appApi.reducerPath]: appApi.reducer,\n';
   output += '    [userApi.reducerPath]: userApi.reducer,\n';
   output += '    [localNodesApi.reducerPath]: localNodesApi.reducer,\n';
@@ -60,6 +62,7 @@ export const dynamicStore = () => {
     });
   });
   output += '  },\n';
+  output += '  // @ts-ignore - middleware type mismatch from different RTK versions across sub-packages\n';
   output += '  middleware: (getDefaultMiddleware) =>\n';
   output += '    getDefaultMiddleware()\n';
   output += '      .concat(appApi.middleware)\n';
@@ -75,7 +78,6 @@ export const dynamicStore = () => {
 
   output += 'store.subscribe(() => {\n';
   output += '  const state = store.getState();\n';
-  output += '  localStorage.setItem("token", state.token.value);\n';
   output += '  localStorage.setItem("name", state.loggedInUser.value.name);\n';
   output += '  localStorage.setItem("email", state.loggedInUser.value.email);\n';
   output += '  localStorage.setItem("id", state.loggedInUser.value.id);\n';

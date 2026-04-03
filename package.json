@@ -21,13 +21,11 @@
     "@clarion-app/llm-client-frontend": "file:../llm-client-frontend",
     "@clarion-app/reader-frontend": "file:../reader/reader-frontend",
     "@clarion-app/rss-torrents-frontend": "file:../rss-torrents/rss-torrents-frontend",
-    "@clarion-app/types": "^1.2.0",
+    "@clarion-app/types": "^2.0.0",
     "@clarion-app/weather-frontend": "file:../weather/weather-frontend",
     "@clarion-app/wizlight-frontend": "file:../wizlight-frontend",
     "@reduxjs/toolkit": "^2.2.6",
-    "fs": "^0.0.1-security",
     "laravel-echo": "^2.1.4",
-    "npm": "^10.8.1",
     "pusher-js": "^8.4.0",
     "react": "^18.2.0",
     "react-redux": "^9.1.2",
@@ -52,14 +50,5 @@
     "typescript": "^5.0.2",
     "vite": "^5.1.0",
     "vitest": "^4.1.2"
-  },
-  "customFields": {
-    "backendUrl": "http://192.168.199.134:8000",
-    "reverb": {
-      "host": "192.168.199.134",
-      "port": "6001",
-      "protocol": "http",
-      "appKey": "424bb00e-2aa6-11f0-81e2-74563cc6aaeb"
-    }
   }
 }
