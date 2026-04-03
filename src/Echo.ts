@@ -18,12 +18,25 @@ if(!win.Echo) {
         forceTLS: (reverbConfig.protocol ?? 'https') === 'https',
         enabledTransports: ['ws', 'wss'],
         cluster: 'mt1',
-        authEndpoint: `${backendUrl}/broadcasting/auth`,
-        auth: {
-            headers: {
-              'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || ''),
+        authorizer: (channel: { name: string }) => ({
+            authorize: (socketId: string, callback: (error: boolean, data: unknown) => void) => {
+                const csrfToken = document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '';
+                fetch(`${backendUrl}/broadcasting/auth`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-XSRF-TOKEN': decodeURIComponent(csrfToken),
+                    },
+                    body: `socket_id=${encodeURIComponent(socketId)}&channel_name=${encodeURIComponent(channel.name)}`,
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`Auth failed: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => callback(false, data))
+                .catch(error => callback(true, error));
             },
-        },
-        withCredentials: true,
+        }),
     });
 }
