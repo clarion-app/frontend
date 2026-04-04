@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { installPackagePlugin } from './vite-plugins/installPackagePlugin';
@@ -11,6 +11,7 @@ import { dynamicStore } from './vite-plugins/dynamicStore';
 import { dynamicPackageInitializer } from './vite-plugins/dynamicPackageInitializer';
 import { dynamicReverbConfig } from './vite-plugins/dynamicReverbConfig';
 import { dynamicEventListeners } from './vite-plugins/dynamicEventListeners';
+import { validateSslEnv } from './src/ssl-validation';
 
 // This plugin is to ensure ClarionRoutes.tsx and ClarionMenu.tsx exist before starting the server
 export const devSetupPlugin = () => ({
@@ -34,15 +35,25 @@ export const devSetupPlugin = () => ({
 
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    tsconfigPaths(),
-    dynamicRebuildPlugin(),
-    installPackagePlugin(),
-    devSetupPlugin()
-  ],
-  server: {
-    strictPort: true,
-  },
-})
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', 'VITE_');
+  const ssl = validateSslEnv(env, __dirname);
+
+  return {
+    plugins: [
+      react(),
+      tsconfigPaths(),
+      dynamicRebuildPlugin(),
+      installPackagePlugin(),
+      devSetupPlugin()
+    ],
+    server: {
+      strictPort: true,
+      https: {
+        cert: fs.readFileSync(ssl.certPath),
+        key: fs.readFileSync(ssl.keyPath),
+      },
+      host: ssl.host,
+    },
+  };
+});
