@@ -22,6 +22,7 @@
     "@clarion-app/llm-client-frontend": "file:../llm-client-frontend",
     "@clarion-app/reader-frontend": "file:../reader/reader-frontend",
     "@clarion-app/rss-torrents-frontend": "file:../rss-torrents/rss-torrents-frontend",
+    "@clarion-app/telegram-integration-frontend": "file:../telegram-integration/telegram-integration-frontend",
     "@clarion-app/types": "^2.0.0",
     "@clarion-app/weather-frontend": "file:../weather/weather-frontend",
     "@clarion-app/wizlight-frontend": "file:../wizlight-frontend",
