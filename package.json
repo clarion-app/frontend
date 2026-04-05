@@ -15,6 +15,7 @@
   "dependencies": {
     "@clarion-app/contacts-frontend": "file:../contacts-frontend",
     "@clarion-app/dl-manager-frontend": "file:../download-manager/dl-manager-frontend",
+    "@clarion-app/frontend-base": "file:../frontend-base",
     "@clarion-app/gtd-frontend": "file:../gtd-frontend",
     "@clarion-app/life-log-frontend": "file:../life-log-frontend",
     "@clarion-app/lists-frontend": "file:../lists-frontend",
@@ -35,7 +36,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^20.14.2",
+    "@types/node": "^20.19.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

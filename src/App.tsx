@@ -14,6 +14,7 @@ import { selectCurrentNode, setCurrentNode } from "./node/currentNodeSlice";
 import { SideDrawer } from "./SideDrawer";
 import ErrorBoundary from "./ErrorBoundary";
 import { useAuth } from "./auth/useAuth";
+import { useUserChannel } from "@clarion-app/frontend-base";
 import "./SideDrawer.css";
 
 interface BlockchainSetupPropsType {
@@ -77,6 +78,7 @@ function App() {
 
   useAuth();
   useClarionEvents();
+  useUserChannel();
   useEffect(() => {
     if(data?.blockchainCreated && data?.usersExist) {
       setShouldPoll(false);
